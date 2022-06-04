@@ -1,5 +1,7 @@
 # README
 
+Inspiration: https://youtu.be/iovH8bwSCWY
+
 ## Sending local files
 
 src: https://wwebjs.dev/guide/handling-attachments.html#sending-local-files
