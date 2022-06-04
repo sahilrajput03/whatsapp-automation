@@ -11,6 +11,10 @@ const media = MessageMedia.fromFilePath('./path/to/image.png')
 chat.sendMessage(media)
 ```
 
-`whatsapp-web.js` - https://github.com/pedroslopez/whatsapp-web.js
+## `whatsapp-web.js`
+
+Get started: https://wwebjs.dev/guide/
+
+Github: https://github.com/pedroslopez/whatsapp-web.js
 
 API Docs: https://docs.wwebjs.dev/index.html
