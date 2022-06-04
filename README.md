@@ -12,3 +12,5 @@ chat.sendMessage(media)
 ```
 
 `whatsapp-web.js` - https://github.com/pedroslopez/whatsapp-web.js
+
+API Docs: https://docs.wwebjs.dev/index.html
