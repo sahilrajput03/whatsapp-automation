@@ -37,7 +37,7 @@ client.on('message', async (message) => {
 		// await message.reply(MESSAGE)
 		// console.log(`::replied with:: \`${MESSAGE}\n`)
 
-		// Learn: 2. Or use sendMessage with chatId
+		// Learn: 2. Send simple message with chatId
 		// await client.sendMessage(message.from, "Hello back!");
 
 		// Learn: 3. Attachment from file [TESTED]
