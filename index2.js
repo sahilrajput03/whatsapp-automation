@@ -3,18 +3,22 @@ const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
 
-const testInitialMessgFromCustomer = `Hi I'm Surbhi.
-Source: topfivebestrated.com, [CONVERSATION_ID:1234567890]`;
-if (!hasConversationId(testInitialMessgFromCustomer)) { throw new Error('Test message does not contain CONVERSATION_ID'); }
+const SAMPLE_INITIAL_MESSAGE_FROM_CUSTOMER = `Hi I'm Surbhi.
 
-function hasConversationId(message) { return message.includes('CONVERSATION_ID:'); }
+topfivebestrated.com, [REF_ID:1234567890]`;
+if (!hasRefId(SAMPLE_INITIAL_MESSAGE_FROM_CUSTOMER)) { throw new Error('Test message does not contain REF_ID'); }
+const link = "https://wa.me/918360267243?text=" + encodeURIComponent(SAMPLE_INITIAL_MESSAGE_FROM_CUSTOMER);
+console.log("🚀 ~ link:", link);
+
+function hasRefId(message) { return message.includes('REF_ID:'); }
 
 const greet = `Hello Yce Network, This is Surbhi trying to connect with your business on topfivebestrated.com.
 
 The enquiry message is as follows: hii
 
 Visit www.topfivebestrated.com for more info about your business. Thank you!`;
-const businessWaLinkWithGreet = "https://wa.me/918360267243?text=" + encodeURIComponent(greet);
+const decathlonNumber = "9606489993";
+const businessWaLinkWithGreet = `https://wa.me/91${decathlonNumber}?text=` + encodeURIComponent(greet);
 const messgToCustomer = `Hi Surbhi, Thank you for reaching out to Topfivebestrated.com.
 
 Here is the response to your enquiry for Top gggg. You can now chat directly with Yce Network using the whatsapp link below:
@@ -26,16 +30,15 @@ const client = new Client({ authStrategy: new LocalAuth(), });
 client.on('qr', (qr) => { qrcode.generate(qr, { small: true }); });
 client.on('ready', async () => {
 	console.log('Client is ready!');
-	// const sahilNumber = "918360267243";
-	// const chatId = sahilNumber + "@c.us";
-	// await client.sendMessage(chatId, "Hello back!");
-	// await client.sendMessage(chatId, messgToCustomer);
+	const sahilNumber = "918360267243";
+	const chatId = sahilNumber + "@c.us";
+	await client.sendMessage(chatId, messgToCustomer);
 });
 
 client.on('message', async (message) => {
 	console.log('::RECEIVED::', message.body);
 	console.log('	::FROM::', message.from);
-	if (hasConversationId(message.body)) {
+	if (hasRefId(message.body)) {
 		await client.sendMessage(message.from, messgToCustomer);
 	}
 });
@@ -49,7 +52,7 @@ client.initialize();
 CUSOTMER_INITIATED_QUERY:
 ************
 Hi I'm Surbhi.
-Source: topfivebestrated.com, [CONVERSATION_ID:1234567890]
+Source: topfivebestrated.com, [REF_ID:1234567890]
 
 TO CUSTOMER:
 ************
