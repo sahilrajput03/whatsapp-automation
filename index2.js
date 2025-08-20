@@ -5,7 +5,7 @@ const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 
 const testInitialMessgFromCustomer = `Hi I'm Surbhi.
 Source: topfivebestrated.com, [CONVERSATION_ID:1234567890]`;
-// console.log('has converstion id?', hasConversationId(initialMessgFromCustomer));
+if (!hasConversationId(testInitialMessgFromCustomer)) { throw new Error('Test message does not contain CONVERSATION_ID'); }
 
 function hasConversationId(message) { return message.includes('CONVERSATION_ID:'); }
 
