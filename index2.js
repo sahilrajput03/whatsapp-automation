@@ -3,12 +3,13 @@ const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
 
-const SAMPLE_INITIAL_MESSAGE_FROM_CUSTOMER = `Hi I'm Surbhi.
+const initialMessageFromCustomer = `Hi I'm Surbhi.
 
 topfivebestrated.com, [REF_ID:1234567890]`;
-if (!hasRefId(SAMPLE_INITIAL_MESSAGE_FROM_CUSTOMER)) { throw new Error('Test message does not contain REF_ID'); }
-const link = "https://wa.me/918360267243?text=" + encodeURIComponent(SAMPLE_INITIAL_MESSAGE_FROM_CUSTOMER);
-console.log("🚀 ~ link:", link);
+if (!hasRefId(initialMessageFromCustomer)) { throw new Error('Test message does not contain REF_ID'); }
+const sampleButtonLink = "https://wa.me/918360267243?text=" + encodeURIComponent(initialMessageFromCustomer);
+console.log("🚀 ~ sampleButtonLink:", sampleButtonLink);
+// Button link for user[Tested✅]: <button onclick={() => window.open(sampleButtonLink)}>Submit (via Surbhi)</button>
 
 function hasRefId(message) { return message.includes('REF_ID:'); }
 
