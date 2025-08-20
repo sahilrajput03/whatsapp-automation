@@ -11,26 +11,39 @@ client.on('qr', (qr) => {
 	qrcode.generate(qr, { small: true });
 });
 
+// https://wa.me/918360267243?text=hello%20world
+
 client.on('ready', () => {
 	console.log('Client is ready!');
+
+	//  ✅ Send message on startup...
+	// const ratanNumber = "918699621565";
+	// const sahilNumber = "918360267243";
+	// const himanshuNumber = "918847037612";
+	// const chatId = ratanNumber + "@c.us";
+	// client.sendMessage(chatId, "Hello, I am ready to help you! (automated message from the bot).");
 });
 
 const MESSAGE = 'I am Sahil, how can I help you?';
 const IMAGE_URL = 'https://avatars.githubusercontent.com/u/31458531';
 
 client.on('message', async (message) => {
-	console.log('::got message::', message.body);
-	if (interceptor(message.body)) {
+	console.log('::RECEIVED::', message.body);
+	console.log('::FROM::', message.from);
+	if (isGreeting(message.body)) {
+		// Learn: 1. Reply method
 		// await message.reply(MESSAGE)
 		// console.log(`::replied with:: \`${MESSAGE}\n`)
 
-		let chat = await message.getChat();
+		// Learn: 2. Or use sendMessage with chatId
+		// await client.sendMessage(message.from, "Hello back!");
 
-		// Attachment from file
+		// Learn: 3. Attachment from file [TESTED]
+		let chat = await message.getChat();
 		const media1 = await MessageMedia.fromFilePath('./profile.png');
 		await chat.sendMessage(media1, { caption: MESSAGE });
 
-		// Attachment from url
+		// Learn: 4. Attachment from url
 		// const media = await MessageMedia.fromUrl('https://via.placeholder.com/350x150.png')
 		// await chat.sendMessage(media)
 	}
@@ -41,7 +54,7 @@ client.on('message', async (message) => {
 
 client.initialize();
 
-function interceptor(message) {
+function isGreeting(message) {
 	const found = ['hi', 'hello', 'namaste'].find((t) => message.toLowerCase() === t);
 	return Boolean(found);
 }
