@@ -19,11 +19,9 @@ client.on('ready', () => {
 	console.log('Client is ready!');
 
 	//  ✅ Send message on startup...
-	// const ratanNumber = "918699621565";
-	// const sahilNumber = "918360267243";
-	// const himanshuNumber = "918847037612";
-	// const chatId = ratanNumber + "@c.us";
-	// client.sendMessage(chatId, "Hello, I am ready to help you! (automated message from the bot).");
+	const ratanNumber = "918699621565"; const sahilNumber = "918360267243"; const himanshuNumber = "918847037612";
+	const chatId = sahilNumber + "@c.us";
+	client.sendMessage(chatId, "Hello, I am ready to help you! (automated message from the bot).");
 });
 
 const MESSAGE = 'I am Sahil, how can I help you?';
