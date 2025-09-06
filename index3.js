@@ -29,7 +29,7 @@ The enquiry message is as follows --- ${customerMessage}
 Visit www.topfivebestrated.com for more info about your business. Thank you!`;
 const businessWaLinkWithGreet = (customerName, customerMessage, businessName, businessWhatsAppNumber) => `https://wa.me/91${businessWhatsAppNumber}?text=` + encodeURIComponent(greet(customerName, customerMessage, businessName));
 const messgToCustomer = (customerName, customerMessage, businessName, businessLocationLink, businessWhatsAppNumber, slug) => {
-	// Note: Now I'm generating fullBusinessLink from a short alias link like `waSlugLink` in favor of showing short link to users.
+	// Note: Now I'm usinig pre generated whatsapp link (saved on `customer_interaction.whatsapp_link`) from a short alias link like `waSlugLink` in favor of showing short link to users.
 	// const businessWaLink = businessWaLinkWithGreet(customerName, customerMessage, businessName, businessWhatsAppNumber);
 	const waSlugLink = `https://topfivebestrated.com/portal/api/customer-interactions/${slug}/whatsapp`;
 
