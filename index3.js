@@ -58,7 +58,7 @@ client.on('message', async (message) => {
 	console.log('	::FROM::', message.from);
 	// await client.sendMessage(message.from, messgToCustomer(customerName, businessName, businessLocationLink, businessWhatsAppNumber));
 
-	if (hasRefId(message.from)) { handleRefIdMessage(message.from, message.body); }
+	if (hasRefId(message.body)) { handleRefIdMessage(message.from, message.body); }
 	else { console.log('❌ refId not found in the message.'); }
 });
 
