@@ -1,0 +1,116 @@
+
+const { default: axios } = require('axios');
+const qrcode = require('qrcode-terminal');
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+// https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
+
+const consumeConsumerInteraction = require('./himanshu/sampleResponseOfConsumeConsumerInteraction');
+
+const initialMessageFromCustomer = `Hi I'm Surbhi.
+
+topfivebestrated.com, [REF_ID:1234567890]`;
+if (!hasRefId(initialMessageFromCustomer)) { throw new Error('Test message does not contain REF_ID'); }
+const sampleButtonLink = "https://wa.me/918360267243?text=" + encodeURIComponent(initialMessageFromCustomer);
+// console.log("🚀 ~ sampleButtonLink:", sampleButtonLink);
+// Button link for user[Tested✅]: <button onclick={() => window.open(sampleButtonLink)}>Submit (via Surbhi)</button>
+
+function hasRefId(message) { return message.includes('REF_ID:'); }
+function getRefId(message) { // https://chatgpt.com/c/68bac2a0-7904-8327-9be4-dacc0fb09963
+	const match = message.match(/\[REF_ID:\s*(\d+)\]/);
+	return match ? match[1] : null;
+}
+
+// const businessWhatsapp = "9606489993"; // ? working phone number
+
+const greet = (customerName, customerMessage, businessName) => `Hello ${businessName}, This is ${customerName} trying to connect with your business on topfivebestrated.com.
+
+The enquiry message is as follows --- ${customerMessage}
+
+Visit www.topfivebestrated.com for more info about your business. Thank you!`;
+const businessWaLinkWithGreet = (customerName, customerMessage, businessName, businessWhatsAppNumber) => `https://wa.me/91${businessWhatsAppNumber}?text=` + encodeURIComponent(greet(customerName, customerMessage, businessName));
+const messgToCustomer = (customerName, customerMessage, businessName, businessLocationLink, businessWhatsAppNumber, slug) => {
+	const businessWaLink = businessWaLinkWithGreet(customerName, customerMessage, businessName, businessWhatsAppNumber);
+
+	return `Hi ${customerName}, Thank you for reaching out to Topfivebestrated.com.
+
+Here is the response to your enquiry for ${customerMessage}. You can now chat directly with ${businessName} using the whatsapp link below:
+- Business Name: ${businessName}
+- Business WhatsApp: ${slug}
+- Business Location Link: ${businessLocationLink}
+`;
+};
+
+const client = new Client({ authStrategy: new LocalAuth(), });
+client.on('qr', (qr) => { qrcode.generate(qr, { small: true }); });
+
+// const MOCK_RECEIVED_MESSAGE_BODY = `
+// Hi I'm s4.
+// hi i'm s4
+// topfivebestrated.com, [REF_ID: 29]`;
+// console.log('REF_ID?', getRefId(MOCK_RECEIVED_MESSAGE_BODY));
+
+client.on('ready', async () => {
+	console.log('Client is ready!');
+});
+
+client.on('message', async (message) => {
+	console.log('::RECEIVED::', message.body);
+	console.log('	::FROM::', message.from);
+	// await client.sendMessage(message.from, messgToCustomer(customerName, businessName, businessLocationLink, businessWhatsAppNumber));
+
+	if (hasRefId(message.from)) { handleRefIdMessage(message.from, message.body); }
+	else { console.log('❌ refId not found in the message.'); }
+});
+
+client.initialize();
+
+const handleRefIdMessage = async (senderChatId, messageBody) => {
+	// if (hasRefId(MOCK_RECEIVED_MESSAGE_BODY)) { console.log('❌ refId not found in -- MOCK_RECEIVED_MESSAGE_BODY -- message.') } // ! TESTING  ONLY
+	// const res = consumeConsumerInteraction.res; // ! TESTING  ONLY
+
+	const id = getRefId(messageBody);
+	console.log('✅REF_ID?', id);
+	const res = await axios.post(`https://topfivebestrated.com/portal/api/customer-interactions/${id}/consume`);
+	if (res.data.status === 'success') {
+		const { customer_interaction, business } = res.data;
+
+		const customerName = customer_interaction.customer_name;
+		const customerMessage = customer_interaction.message;
+		const slug = customer_interaction.slug;
+		const businessName = business.name;
+		const businessWhatsAppNumber = business?.whatsapp?.replace(/\s+/g, "");;
+		console.log("🚀 ~ handleRefIdMessage ~ businessWhatsAppNumber:", businessWhatsAppNumber);
+		const businessLocationLink = business.location_url;
+		// await client.sendMessage("918360267243" + "@c.us", 'test 123 static!');  // ! For testing only
+		// Preferring `senderChatId`=`messag.from` for reliable customer's whatsapp number
+		await client.sendMessage(senderChatId, messgToCustomer(customerName, customerMessage, businessName, businessLocationLink, businessWhatsAppNumber, slug));
+	} else {
+		console.log('❌ Got error in consume_customer_interaction API.');
+		console.log('res.data?', res.data);
+	}
+}
+
+
+
+
+/*
+CUSOTMER_INITIATED_QUERY:
+************
+Hi I'm Surbhi.
+Source: topfivebestrated.com, [REF_ID:1234567890]
+
+TO CUSTOMER:
+************
+Hi Surbhi, Thank you for reaching out to Topfivebestrated.com. Here is the response to your enquiry for Top gggg. You can now chat directly with Yce Network by on 
+- Business Name: Yce Network
+- Business WhatsApp: https://wa.me/918360267243?text=hello%20world 
+- Business Location Link :Zirakpur
+
+
+-x-x-x-x-x-x--xx---x-x- (BELOW IS NOT NEEDED FOR MY CASE) -x-x-x-x-
+TO BUSINESS:
+************
+Hello Yce Network, This is Surbhi trying to connect with your business on topfivebestrated.com.
+- The enquiry message is as follows: hii
+Visit www.topfivebestrated.com for more info about your business. Thank you!
+*/
