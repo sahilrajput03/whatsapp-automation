@@ -29,13 +29,15 @@ The enquiry message is as follows --- ${customerMessage}
 Visit www.topfivebestrated.com for more info about your business. Thank you!`;
 const businessWaLinkWithGreet = (customerName, customerMessage, businessName, businessWhatsAppNumber) => `https://wa.me/91${businessWhatsAppNumber}?text=` + encodeURIComponent(greet(customerName, customerMessage, businessName));
 const messgToCustomer = (customerName, customerMessage, businessName, businessLocationLink, businessWhatsAppNumber, slug) => {
-	const businessWaLink = businessWaLinkWithGreet(customerName, customerMessage, businessName, businessWhatsAppNumber);
+	// Note: Now I'm generating fullBusinessLink from a short alias link like `waSlugLink` in favor of showing short link to users.
+	// const businessWaLink = businessWaLinkWithGreet(customerName, customerMessage, businessName, businessWhatsAppNumber);
+	const waSlugLink = `https://topfivebestrated.com/portal/api/customer-interactions/${slug}/whatsapp`;
 
 	return `Hi ${customerName}, Thank you for reaching out to Topfivebestrated.com.
 
 Here is the response to your enquiry for ${customerMessage}. You can now chat directly with ${businessName} using the whatsapp link below:
 - Business Name: ${businessName}
-- Business WhatsApp: ${slug}
+- Business WhatsApp: ${waSlugLink}
 - Business Location Link: ${businessLocationLink}
 `;
 };
@@ -79,7 +81,7 @@ const handleRefIdMessage = async (senderChatId, messageBody) => {
 		const slug = customer_interaction.slug;
 		const businessName = business.name;
 		const businessWhatsAppNumber = business?.whatsapp?.replace(/\s+/g, "");;
-		console.log("🚀 ~ handleRefIdMessage ~ businessWhatsAppNumber:", businessWhatsAppNumber);
+		console.log("🚀 ~ businessWhatsAppNumber:", businessWhatsAppNumber);
 		const businessLocationLink = business.location_url;
 		// await client.sendMessage("918360267243" + "@c.us", 'test 123 static!');  // ! For testing only
 		// Preferring `senderChatId`=`messag.from` for reliable customer's whatsapp number
