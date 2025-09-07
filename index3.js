@@ -58,9 +58,7 @@ client.on('qr', (qr) => { qrcode.generate(qr, { small: true }); });
 // topfivebestrated.com, [REF_ID: 29]`;
 // console.log('REF_ID?', getRefId(MOCK_RECEIVED_MESSAGE_BODY));
 
-client.on('ready', async () => {
-	console.log('Client is ready!');
-});
+client.on('ready', async () => { console.log('Client is ready!'); });
 
 client.on('message', async (message) => {
 	console.log('::RECEIVED::', message.body);
@@ -76,7 +74,6 @@ client.initialize();
 const handleRefIdMessage = async (senderChatId, messageBody) => {
 	// if (hasRefId(MOCK_RECEIVED_MESSAGE_BODY)) { console.log('❌ refId not found in -- MOCK_RECEIVED_MESSAGE_BODY -- message.') } // ! TESTING  ONLY
 	// const res = consumeConsumerInteraction.res; // ! TESTING  ONLY
-
 	const id = getRefId(messageBody);
 	console.log('✅REF_ID?', id);
 	try {
@@ -107,7 +104,11 @@ const handleRefIdMessage = async (senderChatId, messageBody) => {
 
 const app = express();
 const PORT = 9000;
-app.listen(PORT, () => { console.log('🚀Server started on port:', PORT); })
+app.listen(PORT, () => { console.log('🚀Server started on:', `http://localhost:${PORT}`); });
+app.get('/', (req, res) => {
+	console.log('hello world form API');
+	res.send('ok');
+})
 
 
 /*
