@@ -4,6 +4,15 @@ const { default: axios } = require('axios');
 const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
+const { yceSnippets } = require('./yce-snippets');
+
+const PREFIX = "yes.";
+const yceSnippetsTerms = Object.keys(yceSnippets).map(s => PREFIX + s);
+yceSnippetsTerms.push(PREFIX);
+
+// Add help snippets as well e.g, "yes." will show all avilable snippets.
+yceSnippets[PREFIX] = 'The available snippets are: \n* ' + yceSnippetsTerms.join('\n* ');
+console.log("🚀 ~ yceSnippets[PREFIX]:", yceSnippets[PREFIX]);
 
 preventPunyCodeWarning();
 
@@ -49,7 +58,17 @@ Here is the response to your enquiry for ${customerMessage}. You can now chat di
 `;
 };
 
-const client = new Client({ authStrategy: new LocalAuth(), });
+// const client = new Client({ authStrategy: new LocalAuth(), });
+const client = new Client({
+	authStrategy: new LocalAuth({
+		// * Note: 'sahil' for my personal and 'yce' for himanshu's bot.
+		clientId: 'sahil', // unique ID per number 
+		// clientId: 'yce', // unique ID per number
+		// Learn: Default `dataPath` folder path is `.wwebjs_auth`
+		// dataPath: './sessions' // base folder for all accounts
+	})
+});
+
 client.on('qr', (qr) => { qrcode.generate(qr, { small: true }); });
 
 // const MOCK_RECEIVED_MESSAGE_BODY = `
@@ -69,11 +88,18 @@ client.on('message', async (message) => {
 	else { console.log('❌ refId not found in the message.'); }
 });
 
-// client.on('message_create', (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
-// 	if (message.fromMe) { // Only handle messages sent by you (not incoming)
-// 		console.log('🚀 YOU SENT A MESSAGE:', message.body);
-// 	}
-// });
+client.on('message_create', async (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
+	if (message.fromMe) { // Only handle messages sent by you (not incoming)
+		console.log('🚀 YOU SENT A MESSAGE:', message.body);
+		if (yceSnippetsTerms.some(s => s === message.body)) {
+			// if (message.body === 'magic.1') { // Simple Test
+			const chat = await message.getChat();
+			// await chat.sendMessage("this is magic 1 text");
+			let key = message.body === PREFIX ? message.body : message.body.replace(PREFIX, "");
+			await chat.sendMessage(yceSnippets[key]);
+		}
+	}
+});
 
 client.initialize();
 
