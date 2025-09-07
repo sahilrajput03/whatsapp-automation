@@ -35,13 +35,16 @@ client.on('message', async (message) => {
 		// await message.reply(MESSAGE)
 		// console.log(`::replied with:: \`${MESSAGE}\n`)
 
+		let chat = await message.getChat();
+
 		// Learn: 2. Send simple message with chatId
-		// await client.sendMessage(message.from, "Hello back!");
+		// await chat.sendMessage('Hello, how are you?'); 					// way 1
+		// await client.sendMessage(message.from, "Hello back!");			// way 2
 
 		// Learn: 3. Attachment from file [TESTED]
-		let chat = await message.getChat();
 		const media1 = await MessageMedia.fromFilePath('./profile.png');
 		await chat.sendMessage(media1, { caption: MESSAGE });
+		// await chat.sendMessage('hello world??'); // ! TESTING
 
 		// Learn: 4. Attachment from url
 		// const media = await MessageMedia.fromUrl('https://via.placeholder.com/350x150.png')
