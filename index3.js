@@ -31,13 +31,17 @@ const businessWaLinkWithGreet = (customerName, customerMessage, businessName, bu
 const messgToCustomer = (customerName, customerMessage, businessName, businessLocationLink, businessWhatsAppNumber, slug) => {
 	// Note: Now I'm usinig pre generated whatsapp link (saved on `customer_interaction.whatsapp_link`) from a short alias link like `waSlugLink` in favor of showing short link to users.
 	// const businessWaLink = businessWaLinkWithGreet(customerName, customerMessage, businessName, businessWhatsAppNumber);
-	const waSlugLink = `https://topfivebestrated.com/portal/api/customer-interactions/${slug}/whatsapp`;
+	// const waSlugLink = `https://topfivebestrated.com/portal/api/customer-interactions/${slug}/whatsapp`;
+	// 	Using .htaccess I redirected below url to laravel's route, i.e,
+	// 		Example: https://topfivebestrated.com/wa/c3077925f42e38ed/whatsapp redirects to https://topfivebestrated.com/portal/api/customer-interactions/c3077925f42e38ed/whatsapp
+	const waSlugLink = `https://topfivebestrated.com/wa/${slug}/whatsapp`;
 
 	return `Hi ${customerName}, Thank you for reaching out to Topfivebestrated.com.
 
 Here is the response to your enquiry for ${customerMessage}. You can now chat directly with ${businessName} using the whatsapp link below:
 - Business Name: ${businessName}
 - Business WhatsApp: ${waSlugLink}
+- Phone: ${businessWhatsAppNumber}
 - Business Location Link: ${businessLocationLink}
 `;
 };
@@ -72,23 +76,28 @@ const handleRefIdMessage = async (senderChatId, messageBody) => {
 
 	const id = getRefId(messageBody);
 	console.log('✅REF_ID?', id);
-	const res = await axios.post(`https://topfivebestrated.com/portal/api/customer-interactions/${id}/consume`);
-	if (res.data.status === 'success') {
-		const { customer_interaction, business } = res.data;
+	try {
+		const res = await axios.post(`https://topfivebestrated.com/portal/api/customer-interactions/${id}/consume`);
+		if (res.data.status === 'success') {
+			const { customer_interaction, business } = res.data;
 
-		const customerName = customer_interaction.customer_name;
-		const customerMessage = customer_interaction.message;
-		const slug = customer_interaction.slug;
-		const businessName = business.name;
-		const businessWhatsAppNumber = business?.whatsapp?.replace(/\s+/g, "");;
-		console.log("🚀 ~ businessWhatsAppNumber:", businessWhatsAppNumber);
-		const businessLocationLink = business.location_url;
-		// await client.sendMessage("918360267243" + "@c.us", 'test 123 static!');  // ! For testing only
-		// Preferring `senderChatId`=`messag.from` for reliable customer's whatsapp number
-		await client.sendMessage(senderChatId, messgToCustomer(customerName, customerMessage, businessName, businessLocationLink, businessWhatsAppNumber, slug));
-	} else {
-		console.log('❌ Got error in consume_customer_interaction API.');
-		console.log('res.data?', res.data);
+			const customerName = customer_interaction.customer_name;
+			const customerMessage = customer_interaction.message;
+			const slug = customer_interaction.slug;
+			const businessName = business.name;
+			const businessWhatsAppNumber = business?.whatsapp?.replace(/\s+/g, "");;
+			console.log("🚀 ~ businessWhatsAppNumber:", businessWhatsAppNumber);
+			const businessLocationLink = business.location_url;
+			// await client.sendMessage("918360267243" + "@c.us", 'test 123 static!');  // ! For testing only
+			// Preferring `senderChatId`=`messag.from` for reliable customer's whatsapp number
+			await client.sendMessage(senderChatId, messgToCustomer(customerName, customerMessage, businessName, businessLocationLink, businessWhatsAppNumber, slug));
+		} else {
+			console.log('❌ Got error in consume_customer_interaction API.');
+			console.log('res.data?', res.data);
+		}
+	} catch (error) {
+		console.log('❌ Failed to create customer interaction.');
+		console.log(' error.response.data?', error.response.data);
 	}
 }
 
