@@ -69,6 +69,12 @@ client.on('message', async (message) => {
 	else { console.log('❌ refId not found in the message.'); }
 });
 
+// client.on('message_create', (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
+// 	if (message.fromMe) { // Only handle messages sent by you (not incoming)
+// 		console.log('🚀 YOU SENT A MESSAGE:', message.body);
+// 	}
+// });
+
 client.initialize();
 
 const handleRefIdMessage = async (senderChatId, messageBody) => {

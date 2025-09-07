@@ -35,7 +35,7 @@ client.on('message', async (message) => {
 		// await message.reply(MESSAGE)
 		// console.log(`::replied with:: \`${MESSAGE}\n`)
 
-		let chat = await message.getChat();
+		const chat = await message.getChat();				// way 1
 
 		// Learn: 2. Send simple message with chatId
 		// await chat.sendMessage('Hello, how are you?'); 					// way 1
@@ -52,8 +52,14 @@ client.on('message', async (message) => {
 	}
 });
 
-// LEARN:
-// let chat = await getChatById(chatId)
+//   Learn:
+// const chat = await getChatById(message.from)	// way 2
+
+client.on('message_create', (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
+	if (message.fromMe) { // Only handle messages sent by you (not incoming)
+		console.log('🚀 YOU SENT A MESSAGE:', message.body);
+	}
+});
 
 client.initialize();
 
