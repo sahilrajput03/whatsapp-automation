@@ -102,11 +102,16 @@ const handleRefIdMessage = async (senderChatId, messageBody) => {
 };
 
 
+// 🚀 🚀 🚀 Ulta Fast Testing 🚀 🚀 
 const app = express();
 const PORT = 9000;
 app.listen(PORT, () => { console.log('🚀Server started on:', `http://localhost:${PORT}`); });
-app.get('/', (req, res) => {
-	console.log('hello world form API');
+app.use(express.json()); // To accept json data (source: https://expressjs.com/en/api.html#express.json)
+app.get('/', (req, res) => { res.send('ok'); });
+app.post('/', (req, res) => {
+	console.log('⭐️ Received HTTP request:  req.body?', req.body);
+	const chatId = "918360267243@c.us"; // sahil
+	handleRefIdMessage(chatId, req.body.message);
 	res.send('ok');
 })
 
