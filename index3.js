@@ -1,8 +1,11 @@
-
+const express = require('express');
+const { preventPunyCodeWarning } = require('./log-utils');
 const { default: axios } = require('axios');
 const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
+
+preventPunyCodeWarning();
 
 const consumeConsumerInteraction = require('./himanshu/sampleResponseOfConsumeConsumerInteraction');
 
@@ -99,9 +102,12 @@ const handleRefIdMessage = async (senderChatId, messageBody) => {
 		console.log('❌ Failed to create customer interaction.');
 		console.log(' error.response.data?', error.response.data);
 	}
-}
+};
 
 
+const app = express();
+const PORT = 9000;
+app.listen(PORT, () => { console.log('🚀Server started on port:', PORT); })
 
 
 /*
