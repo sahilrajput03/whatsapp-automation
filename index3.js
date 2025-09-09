@@ -80,12 +80,25 @@ client.on('message', async (message) => {
 	else { console.log('❌ refId not found in the message.'); }
 });
 
+const sahilChatId = '918360267243@c.us';
+const AI_BOT_FLAG = "BOT_6b042315";
+
 client.on('message_create', async (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
 	if (message.fromMe) { // Only handle messages sent by you (not incoming)
-		console.log('🚀 YOU SENT A MESSAGE:', message.body);
+		console.log('🚀 YOU SENT A MESSAGE:', message.body, "🚀 RECEPIENT NUMBER:", message.to);
+		const chat = await message.getChat();
+
+		const isSendingToSahil = message.to === sahilChatId;
+		const hasNoBotFlag = !message.body.includes(AI_BOT_FLAG);
+		const isSendingFromSahil = message.from === sahilChatId; // ? This is necessary so that below code only triggers for my own number.
+		if (isSendingToSahil && hasNoBotFlag && isSendingFromSahil) {
+			// Note: Adding bot flag will ensure that our bot does NOT reply its own
+			// 		 message. Otherwise it can cause infinite loop replying to its own messages.
+			await chat.sendMessage('Hello from bot.\n' + AI_BOT_FLAG);
+		}
+
 		if (yceSnippetsTerms.some(s => s === message.body)) {
 			// if (message.body === 'magic.1') { // Simple Test
-			const chat = await message.getChat();
 			// await chat.sendMessage("this is magic 1 text");
 			let key = message.body === PREFIX ? message.body : message.body.replace(PREFIX, "");
 			await chat.sendMessage(yceSnippets[key]);
@@ -147,8 +160,7 @@ app.use(express.json()); // To accept json data (source: https://expressjs.com/e
 app.get('/', (req, res) => { res.send('ok'); });
 app.post('/', (req, res) => {
 	console.log('⭐️ Received HTTP request:  req.body?', req.body);
-	const chatId = "918360267243@c.us"; // sahil
-	handleRefIdMessage(chatId, req.body.message);
+	handleRefIdMessage(sahilChatId, req.body.message);
 	res.send('ok');
 })
 
