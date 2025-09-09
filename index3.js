@@ -2,9 +2,10 @@ const express = require('express');
 const { preventPunyCodeWarning } = require('./log-utils');
 const { default: axios } = require('axios');
 const qrcode = require('qrcode-terminal');
-const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+const { MessageMedia } = require('whatsapp-web.js');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
 const { yceSnippets } = require('./yce-snippets');
+const { client } = require('./wwebclient');
 
 const PREFIX = "yes.";
 const yceSnippetsTerms = Object.keys(yceSnippets).map(s => PREFIX + s);
@@ -58,16 +59,6 @@ Here is the response to your enquiry for ${customerMessage}. You can now chat di
 `;
 };
 
-// const client = new Client({ authStrategy: new LocalAuth(), });
-const client = new Client({
-	authStrategy: new LocalAuth({
-		// * Note: 'sahil' for my personal and 'yce' for himanshu's bot.
-		clientId: 'sahil', // unique ID per number 
-		// clientId: 'yce', // unique ID per number
-		// Learn: Default `dataPath` folder path is `.wwebjs_auth`
-		// dataPath: './sessions' // base folder for all accounts
-	})
-});
 
 client.on('qr', (qr) => { qrcode.generate(qr, { small: true }); });
 

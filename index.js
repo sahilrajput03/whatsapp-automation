@@ -1,15 +1,14 @@
 const qrcode = require('qrcode-terminal');
-const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+const { MessageMedia } = require('whatsapp-web.js');
+const { client } = require('./wwebclient');
+const { preventPunyCodeWarning } = require('./log-utils');
+
+preventPunyCodeWarning();
 
 // https://chatgpt.com/c/68a4b1a7-5644-8327-8841-d09136f3db7d
 
 // ! TODO: Detect when the message is successfully delivered or read. 
 // 			(check with ChatGPT, also this idea is from ChatGPT itself).
-
-// By Default it uses a persistent storage to store the session, yikes!
-const client = new Client({
-	authStrategy: new LocalAuth(),
-});
 
 client.on('qr', (qr) => {
 	// console.log('QR RECEIVED', qr)

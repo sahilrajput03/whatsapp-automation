@@ -1,7 +1,11 @@
 
 const qrcode = require('qrcode-terminal');
-const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+const { client } = require('./wwebclient');
+const { MessageMedia } = require('whatsapp-web.js');
+const { preventPunyCodeWarning } = require('./log-utils');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
+
+preventPunyCodeWarning();
 
 const initialMessageFromCustomer = `Hi I'm Surbhi.
 
@@ -27,7 +31,6 @@ Here is the response to your enquiry for Top gggg. You can now chat directly wit
 - Business Location Link: Zirakpur
 - Business WhatsApp: ${businessWaLinkWithGreet}`;
 
-const client = new Client({ authStrategy: new LocalAuth(), });
 client.on('qr', (qr) => { qrcode.generate(qr, { small: true }); });
 client.on('ready', async () => {
 	console.log('Client is ready!');
