@@ -114,6 +114,18 @@ const handleRefIdMessage = async (senderChatId, messageBody) => {
 			// await client.sendMessage("918360267243" + "@c.us", 'test 123 static!');  // ! For testing only
 			// Preferring `senderChatId`=`messag.from` for reliable customer's whatsapp number
 			await client.sendMessage(senderChatId, messgToCustomer(customerName, customerMessage, businessName, businessLocationLink, businessWhatsAppNumber, slug));
+
+			// Sending message to business owner:
+			const messageToBusinessNumber = `
+Hello ${businessName}, This is ${customerName} trying to connect with your business on topfivebestrated.com.
+- The enquiry message is as follows: ${customerMessage}
+
+Visit www.topfivebestrated.com for more info about your business. Thank you!
+`;
+			console.log("🚀 businessWhatsAppNumber:", businessWhatsAppNumber);
+			const businessChatId = "91" + businessWhatsAppNumber + "@c.us";
+			console.log("🚀 businessChatId:", businessChatId);
+			await client.sendMessage(businessChatId, messageToBusinessNumber);
 		} else {
 			console.log('❌ Got error in consume_customer_interaction API.');
 			console.log('res.data?', res.data);
