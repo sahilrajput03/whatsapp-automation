@@ -6,6 +6,7 @@ const { MessageMedia } = require('whatsapp-web.js');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
 const { yceSnippets } = require('./yce-snippets');
 const { client } = require('./wwebclient');
+const { getPhoneNumberFromChatId } = require('./utils');
 
 const PREFIX = "yes.";
 const yceSnippetsTerms = Object.keys(yceSnippets).map(s => PREFIX + s);
@@ -119,6 +120,7 @@ const handleRefIdMessage = async (senderChatId, messageBody) => {
 			const messageToBusinessNumber = `
 Hello ${businessName}, This is ${customerName} trying to connect with your business on topfivebestrated.com.
 - The enquiry message is as follows: ${customerMessage}
+- Phone: ${getPhoneNumberFromChatId(senderChatId)}
 
 Visit www.topfivebestrated.com for more info about your business. Thank you!
 `;
