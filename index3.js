@@ -7,6 +7,12 @@ const { MessageMedia } = require('whatsapp-web.js');
 const { yceSnippets } = require('./yce-snippets');
 const { client } = require('./wwebclient');
 const { getPhoneNumberFromChatId } = require('./utils');
+const { GoogleGenAI } = require("@google/genai");
+require('dotenv').config();
+
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+if (!GOOGLE_API_KEY) { throw new Error('❌GOOGLE_API_KEY environment variable is not set.'); }
+const ai = new GoogleGenAI({ apiKey: GOOGLE_API_KEY });
 
 const PREFIX = "yes.";
 const yceSnippetsTerms = Object.keys(yceSnippets).map(s => PREFIX + s);
@@ -81,20 +87,28 @@ client.on('message', async (message) => {
 });
 
 const sahilChatId = '918360267243@c.us';
-const AI_BOT_FLAG = "BOT_6b042315";
+const AI_BOT_FLAG = "Piku 🌸";
 
 client.on('message_create', async (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
 	if (message.fromMe) { // Only handle messages sent by you (not incoming)
 		console.log('🚀 YOU SENT A MESSAGE:', message.body, "🚀 RECEPIENT NUMBER:", message.to);
 		const chat = await message.getChat();
 
-		const isSendingToSahil = message.to === sahilChatId;
+		const isToSahil = message.to === sahilChatId;
 		const hasNoBotFlag = !message.body.includes(AI_BOT_FLAG);
-		const isSendingFromSahil = message.from === sahilChatId; // ? This is necessary so that below code only triggers for my own number.
-		if (isSendingToSahil && hasNoBotFlag && isSendingFromSahil) {
+		const isFromSahil = message.from === sahilChatId; // ? This is necessary so that below code only triggers for my own number.
+		if (isToSahil && hasNoBotFlag && isFromSahil) {
 			// Note: Adding bot flag will ensure that our bot does NOT reply its own
 			// 		 message. Otherwise it can cause infinite loop replying to its own messages.
-			await chat.sendMessage('Hello from bot.\n' + AI_BOT_FLAG);
+			// await chat.sendMessage(`${AI_BOT_FLAG}: + 'Hello from bot.\n'`);
+
+			// Using AI to reply:
+			// Note: We must create the instance each time otherwise it stores
+			// 		all previous messages which is not what I want for now.
+			const aiChat = ai.chats.create({ model: "gemini-2.5-flash" });
+			const response1 = await aiChat.sendMessage({ message: message.body });
+			// console.log("✅ Chat response 1:", response1.text);
+			await chat.sendMessage(`${AI_BOT_FLAG}: ${response1.text}`);
 		}
 
 		if (yceSnippetsTerms.some(s => s === message.body)) {
