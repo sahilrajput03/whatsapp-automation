@@ -77,13 +77,41 @@ client.on('qr', (qr) => { qrcode.generate(qr, { small: true }); });
 
 client.on('ready', async () => { console.log('Client is ready!'); });
 
+
+// Note: I'm keeing this outisde of `handleMessageBySalesman` as its helpful
+// 	to have context previous history without having to save to database
+// 	for testing purpose for now.
+const aiChatSalesman = ai.chats.create({
+	model: "gemini-2.5-flash",
+	config: {
+		// System Prompt: https://chatgpt.com/c/68c193d1-a0c8-8328-806d-074d71a4c931
+		systemInstruction: "You are a friendly sales agent for YES PRINT. Talk in short Hinglish. Answer customer queries, suggest printing services (pamphlets, posters, banners, lamination, etc.), give prices if asked, and encourage quick orders. Keep replies simple, clear, and professional.",
+	}
+});
+async function handleMessageBySalesman(message) {
+	const chat = await message.getChat();
+	try {
+		const response1 = await aiChatSalesman.sendMessage({ message: message.body });
+		await chat.sendMessage(`${AI_BOT_FLAG}: ${response1.text}`);
+		// console.log("✅ Chat response 1:", response1.text);
+	} catch (error) {
+		console.log('ERROR ❌❌ ❌ ❌ ❌ ❌ ❌  ', error.toString());
+	}
+}
+
 client.on('message', async (message) => {
-	console.log('::RECEIVED::', message.body);
-	console.log('	::FROM::', message.from);
+	console.log(`✅ RECEIVED from ${message.from}`, message.body);
 	// await client.sendMessage(message.from, messgToCustomer(customerName, businessName, businessLocationLink, businessWhatsAppNumber));
 
 	if (hasRefId(message.body)) { handleRefIdMessage(message.from, message.body); }
-	else { console.log('❌ refId not found in the message.'); }
+	else { console.log('\t❌ refId not found in the message.'); }
+
+	// ! Add `from` when testing the sales bot.
+	// const isFromSpecificNumber = message.from === '****8'; 
+	// const isToSahil = message.to === sahilChatId;
+	// if (isToSahil && isFromSpecificNumber) {
+	// 	await handleMessageBySalesman(message);
+	// }
 });
 
 const sahilChatId = '918360267243@c.us';
@@ -91,7 +119,7 @@ const AI_BOT_FLAG = "Piku 🌸";
 
 client.on('message_create', async (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
 	if (message.fromMe) { // Only handle messages sent by you (not incoming)
-		console.log('🚀 YOU SENT A MESSAGE:', message.body, "🚀 RECEPIENT NUMBER:", message.to);
+		console.log(`🚀 YOU SENT A MESSAGE to ${message.to}:`, message.body);
 		const chat = await message.getChat();
 
 		const isToSahil = message.to === sahilChatId;
@@ -126,7 +154,7 @@ const handleRefIdMessage = async (senderChatId, messageBody) => {
 	// if (hasRefId(MOCK_RECEIVED_MESSAGE_BODY)) { console.log('❌ refId not found in -- MOCK_RECEIVED_MESSAGE_BODY -- message.') } // ! TESTING  ONLY
 	// const res = consumeConsumerInteraction.res; // ! TESTING  ONLY
 	const id = getRefId(messageBody);
-	console.log('✅REF_ID?', id);
+	console.log('\t✅ REF_ID?', id);
 	try {
 		const res = await axios.post(`https://topfivebestrated.com/portal/api/customer-interactions/${id}/consume`);
 		if (res.data.status === 'success') {
