@@ -20,7 +20,7 @@ _tldr; Yes if small project and you can afford being blocked and switch to anoth
 
 # Hosting on linode
 
-- Ram Computation: 330 mb
+- Ram Computation: **330 mb**
 
 How did I finally able to login?
 
