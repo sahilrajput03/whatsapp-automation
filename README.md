@@ -1,4 +1,4 @@
-# Learn `whatsapp-web.js1`
+# Learn `whatsapp-web.js`
 
 **Quick Links:**
 
