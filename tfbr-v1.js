@@ -2,7 +2,7 @@
 const qrcode = require('qrcode-terminal');
 const { client } = require('./wwebclient');
 const { MessageMedia } = require('whatsapp-web.js');
-const { preventPunyCodeWarning } = require('./log-utils');
+const { preventPunyCodeWarning, logMessageReceived } = require('./log-utils');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
 
 preventPunyCodeWarning();
@@ -40,8 +40,7 @@ client.on('ready', async () => {
 });
 
 client.on('message', async (message) => {
-	console.log('::RECEIVED::', message.body);
-	console.log('	::FROM::', message.from);
+	logMessageReceived(message);
 	if (hasRefId(message.body)) {
 		await client.sendMessage(message.from, messgToCustomer);
 	}

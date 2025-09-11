@@ -1,7 +1,8 @@
+// @ts-nocheck
 const qrcode = require('qrcode-terminal');
 const { MessageMedia } = require('whatsapp-web.js');
 const { client } = require('./wwebclient');
-const { preventPunyCodeWarning } = require('./log-utils');
+const { preventPunyCodeWarning, logMessageReceived, logMessageSend } = require('./log-utils');
 
 preventPunyCodeWarning();
 
@@ -30,8 +31,7 @@ const MESSAGE = 'I am Sahil, how can I help you?';
 const IMAGE_URL = 'https://avatars.githubusercontent.com/u/31458531';
 
 client.on('message', async (message) => {
-	console.log('::RECEIVED::', message.body);
-	console.log('::FROM::', message.from);
+	logMessageReceived(message);
 	if (isGreeting(message.body)) {
 		// Learn: 1. Reply method
 		// await message.reply(MESSAGE)
@@ -59,7 +59,7 @@ client.on('message', async (message) => {
 
 client.on('message_create', (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
 	if (message.fromMe) { // Only handle messages sent by you (not incoming)
-		console.log('🚀 YOU SENT A MESSAGE:', message.body);
+		logMessageSend(message);
 	}
 });
 

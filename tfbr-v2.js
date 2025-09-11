@@ -1,5 +1,5 @@
 const express = require('express');
-const { preventPunyCodeWarning } = require('./log-utils');
+const { preventPunyCodeWarning, logMessageReceived, logMessageSend } = require('./log-utils');
 const { default: axios } = require('axios');
 const qrcode = require('qrcode-terminal');
 const { MessageMedia } = require('whatsapp-web.js');
@@ -8,6 +8,7 @@ const { yceSnippets } = require('./yce-snippets');
 const { client } = require('./wwebclient');
 const { getPhoneNumberFromChatId } = require('./utils');
 const { GoogleGenAI } = require("@google/genai");
+
 require('dotenv').config();
 
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
@@ -100,7 +101,7 @@ async function handleMessageBySalesman(message) {
 }
 
 client.on('message', async (message) => {
-	console.log(`✅ RECEIVED from ${message.from}`, message.body);
+	logMessageReceived(message);
 	// await client.sendMessage(message.from, messgToCustomer(customerName, businessName, businessLocationLink, businessWhatsAppNumber));
 
 	if (hasRefId(message.body)) { handleRefIdMessage(message.from, message.body); }
@@ -119,7 +120,7 @@ const AI_BOT_FLAG = "Piku 🌸";
 
 client.on('message_create', async (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
 	if (message.fromMe) { // Only handle messages sent by you (not incoming)
-		console.log(`🚀 YOU SENT A MESSAGE to ${message.to}:`, message.body);
+		logMessageSend(message);
 		const chat = await message.getChat();
 
 		const isToSahil = message.to === sahilChatId;
