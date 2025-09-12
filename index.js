@@ -13,6 +13,7 @@ preventPunyCodeWarning();
 
 client.on('qr', (qr) => {
 	// console.log('QR RECEIVED', qr)
+	// * Nowonwards, QR code will be regenerated every 30 seconds until it's scanned with your mobile device. (src: https://wwebjs.dev/guide/creating-your-bot/#qr-code-generation)
 	qrcode.generate(qr, { small: true });
 });
 

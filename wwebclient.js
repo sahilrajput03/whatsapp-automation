@@ -1,5 +1,8 @@
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 
+// * Learn: We can create multiple wa bots using `const client2 = new Client(...)` (src: https://wwebjs.dev/guide/creating-your-bot/authentication.html#location-path )
+// * Learn: Storing your auth session to dabase like mongodb ❤️: https://wwebjs.dev/guide/creating-your-bot/authentication.html#remote-stores
+
 // By Default it uses a persistent storage to store the session, yikes!
 // const client = new Client({ authStrategy: new LocalAuth(), });
 
