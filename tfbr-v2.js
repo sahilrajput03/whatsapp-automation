@@ -25,7 +25,7 @@ console.log("🚀 ~ yceSnippets[PREFIX]:", yceSnippets[PREFIX]);
 
 preventPunyCodeWarning();
 
-const consumeConsumerInteraction = require('./himanshu/sampleResponseOfConsumeConsumerInteraction');
+// const consumeConsumerInteraction = require('./himanshu/sampleResponseOfConsumeConsumerInteraction');
 
 const initialMessageFromCustomer = `Hi I'm Surbhi.
 

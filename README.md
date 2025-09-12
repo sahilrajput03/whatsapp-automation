@@ -18,3 +18,10 @@ How did I finally able to login?
 2. I used to used `Glist` (a web based cli) from linode's server to scan the qr.
 
 It succeeded! 🚀
+
+# Using pm2
+
+```sh
+# Create pm2 app
+pm2 start nodemon --name tfbr -- tfbr-v2.js
+```
