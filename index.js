@@ -45,6 +45,7 @@ client.on('message', async (message) => {
 		// await client.sendMessage(message.from, "Hello back!");			// way 2
 
 		// Learn: 3. Attachment from file [TESTED]
+		// 	❤️ Docs: https://wwebjs.dev/guide/creating-your-bot/handling-attachments.html
 		const media1 = await MessageMedia.fromFilePath('./profile.png');
 		await chat.sendMessage(media1, { caption: MESSAGE });
 		// await chat.sendMessage('hello world??'); // ! TESTING
