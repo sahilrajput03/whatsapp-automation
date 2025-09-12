@@ -6,6 +6,9 @@ const { preventPunyCodeWarning, logMessageReceived, logMessageSend } = require('
 
 preventPunyCodeWarning();
 
+// Guide: https://wwebjs.dev
+// API Docs: https://docs.wwebjs.dev
+
 // https://chatgpt.com/c/68a4b1a7-5644-8327-8841-d09136f3db7d
 
 // ! TODO: Detect when the message is successfully delivered or read. 

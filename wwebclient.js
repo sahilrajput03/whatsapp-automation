@@ -9,8 +9,8 @@ const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const client = new Client({
     authStrategy: new LocalAuth({
         // * Note: 'sahil' for my personal and 'topfivebestrated' for himanshu's bot.
-        clientId: 'sahil', // unique ID per number 
-        // clientId: 'topfivebestrated', // unique ID per number
+        // clientId: 'sahil', // unique ID per number 
+        clientId: 'topfivebestrated', // unique ID per number
         // Learn: Default `dataPath` folder path is `.wwebjs_auth`
         // dataPath: './sessions' // base folder for all accounts
     })
