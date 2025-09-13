@@ -11,7 +11,7 @@ const { GoogleGenAI } = require("@google/genai");
 
 require('dotenv').config();
 
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || "";
 if (!GOOGLE_API_KEY) { throw new Error('❌GOOGLE_API_KEY environment variable is not set.'); }
 const ai = new GoogleGenAI({ apiKey: GOOGLE_API_KEY });
 
