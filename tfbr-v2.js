@@ -104,6 +104,7 @@ async function handleMessageBySalesman(message) {
 	}
 }
 
+// ❤️ Emitted when a new message is received.
 client.on('message', async (message) => {
 	logMessageReceived(message);
 	// await client.sendMessage(message.from, messgToCustomer(customerName, businessName, businessLocationLink, businessWhatsAppNumber));
@@ -121,9 +122,12 @@ client.on('message', async (message) => {
 
 const AI_BOT_FLAG = "Piku 🌸";
 
+// ❤️ Emitted when a new message is created, which may include the current user's own messages.
 client.on('message_create', async (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
 	if (message.fromMe) { // Only handle messages sent by you (not incoming)
 		logMessageSend(message);
+		// ✅ Bot Health Check Command: Reply back "pong" directly to the message
+		if (message.body === '!ping') { message.reply('pong'); console.log('\t✅ Replying `pong` to command `!ping`'); }
 		const chat = await message.getChat();
 
 		const isToSahil = message.to === sahilChatId;

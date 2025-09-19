@@ -40,6 +40,7 @@ client.on('ready', async () => {
 	await client.sendMessage(sahilChatId, messgToCustomer);
 });
 
+// ❤️ Emitted when a new message is received.
 client.on('message', async (message) => {
 	logMessageReceived(message);
 	if (hasRefId(message.body)) {
