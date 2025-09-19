@@ -1,11 +1,14 @@
-
+// @ts-nocheck
 const qrcode = require('qrcode-terminal');
-const { client } = require('./wwebclient');
+const { client, clientId, tfbrClientId, sahilChatId } = require('./wwebclient');
 const { MessageMedia } = require('whatsapp-web.js');
 const { preventPunyCodeWarning, logMessageReceived } = require('./log-utils');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
 
 preventPunyCodeWarning();
+
+// ✅ This is to make sure I use tfbr's number in this file.
+if (clientId !== tfbrClientId) { throw "❌Please use tfbr's clientId."; }
 
 const initialMessageFromCustomer = `Hi I'm Surbhi.
 
@@ -34,9 +37,7 @@ Here is the response to your enquiry for Top gggg. You can now chat directly wit
 client.on('qr', (qr) => { qrcode.generate(qr, { small: true }); });
 client.on('ready', async () => {
 	console.log('Client is ready!');
-	const sahilNumber = "918360267243";
-	const chatId = sahilNumber + "@c.us";
-	await client.sendMessage(chatId, messgToCustomer);
+	await client.sendMessage(sahilChatId, messgToCustomer);
 });
 
 client.on('message', async (message) => {

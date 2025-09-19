@@ -1,10 +1,13 @@
 // @ts-nocheck
 const qrcode = require('qrcode-terminal');
 const { MessageMedia } = require('whatsapp-web.js');
-const { client } = require('./wwebclient');
+const { client, clientId, sahilChatId } = require('./wwebclient');
 const { preventPunyCodeWarning, logMessageReceived, logMessageSend } = require('./log-utils');
 
 preventPunyCodeWarning();
+
+// ✅ This is to make sure I use my own number for testing.
+if (clientId !== 'sahil') { throw "❌Please use sahil's clientId."; }
 
 // Guide: https://wwebjs.dev
 // API Docs: https://docs.wwebjs.dev
@@ -22,14 +25,18 @@ client.on('qr', (qr) => {
 
 // https://wa.me/918360267243?text=hello%20world
 
-client.on('ready', () => {
+client.on('ready', async () => {
 	console.log('Client is ready!');
-	// client.setStatus('hello world...'); // [Tested] (Sets user's profile status)
+	// ✅ Learn: Sets "About" text of user
+	// client.setStatus('hello world...'); // [Tested] 
+
+	// ✅ Learn: Send typing state (default for 25 seconds) and then clear it after 3 seconds [TESTED]
+	// const chat = await client.getChatById(sahilChatId);
+	// await chat.sendStateTyping();
+	// setTimeout(async () => { await chat.clearState(); }, 3_000);
 
 	//  ✅ Send message on startup...
-	const ratanNumber = "918699621565"; const sahilNumber = "918360267243"; const himanshuNumber = "918847037612";
-	const chatId = sahilNumber + "@c.us";
-	client.sendMessage(chatId, "Hello, I am ready to help you! (automated message from the bot).");
+	client.sendMessage(sahilChatId, "Hello, I am ready to help you! (automated message from the bot).");
 });
 
 const MESSAGE = 'I am Sahil, how can I help you?';

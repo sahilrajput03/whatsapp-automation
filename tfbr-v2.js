@@ -6,11 +6,14 @@ const qrcode = require('qrcode-terminal');
 const { MessageMedia } = require('whatsapp-web.js');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
 const { yceSnippets } = require('./yce-snippets');
-const { client } = require('./wwebclient');
+const { client, clientId, tfbrClientId, sahilChatId } = require('./wwebclient');
 const { getPhoneNumberFromChatId } = require('./utils');
 const { GoogleGenAI } = require("@google/genai");
 
 require('dotenv').config();
+
+// ✅ This is to make sure I use tfbr's number in this file.
+if (clientId !== tfbrClientId) { throw "❌Please use tfbr's clientId."; }
 
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || "";
 if (!GOOGLE_API_KEY) { throw new Error('❌GOOGLE_API_KEY environment variable is not set.'); }
@@ -116,7 +119,6 @@ client.on('message', async (message) => {
 	// }
 });
 
-const sahilChatId = '918360267243@c.us';
 const AI_BOT_FLAG = "Piku 🌸";
 
 client.on('message_create', async (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
