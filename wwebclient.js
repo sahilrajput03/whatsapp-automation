@@ -6,8 +6,8 @@ const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 // By Default it uses a persistent storage to store the session, yikes!
 // const client = new Client({ authStrategy: new LocalAuth(), });
 
-// const clientid = 'sahil' // unique ID per number 
-const clientid = 'topfivebestrated'; // unique ID per number 
+// const clientid = 'sahil'; // unique ID per number 
+export const clientid = 'topfivebestrated'; // unique ID per number 
 // ! Add a check before commiting via `git commit hook` so that I never commit without clientid as `topfivebestrated`
 
 const client = new Client({

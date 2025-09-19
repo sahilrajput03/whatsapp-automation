@@ -1,3 +1,4 @@
+// @ts-nocheck
 const express = require('express');
 const { preventPunyCodeWarning, logMessageReceived, logMessageSend } = require('./log-utils');
 const { default: axios } = require('axios');

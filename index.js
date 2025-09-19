@@ -24,6 +24,7 @@ client.on('qr', (qr) => {
 
 client.on('ready', () => {
 	console.log('Client is ready!');
+	// client.setStatus('hello world...'); // [Tested] (Sets user's profile status)
 
 	//  ✅ Send message on startup...
 	const ratanNumber = "918699621565"; const sahilNumber = "918360267243"; const himanshuNumber = "918847037612";
