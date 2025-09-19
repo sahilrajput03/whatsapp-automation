@@ -6,7 +6,7 @@ const qrcode = require('qrcode-terminal');
 const { MessageMedia } = require('whatsapp-web.js');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
 const { yceSnippets } = require('./yce-snippets');
-const { client, clientId, tfbrClientId, sahilChatId } = require('./wwebclient');
+const { client, clientId, tfbrClientId, sahilChatId, handleHealthCheckPingMessage } = require('./wwebclient');
 const { getPhoneNumberFromChatId } = require('./utils');
 const { GoogleGenAI } = require("@google/genai");
 
@@ -107,6 +107,7 @@ async function handleMessageBySalesman(message) {
 // ❤️ Emitted when a new message is received.
 client.on('message', async (message) => {
 	logMessageReceived(message);
+	handleHealthCheckPingMessage(message); // reply to any other user's !ping command
 	// await client.sendMessage(message.from, messgToCustomer(customerName, businessName, businessLocationLink, businessWhatsAppNumber));
 
 	if (hasRefId(message.body)) { handleRefIdMessage(message.from, message.body); }
@@ -126,8 +127,7 @@ const AI_BOT_FLAG = "Piku 🌸";
 client.on('message_create', async (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
 	if (message.fromMe) { // Only handle messages sent by you (not incoming)
 		logMessageSend(message);
-		// ✅ Bot Health Check Command: Reply back "pong" directly to the message
-		if (message.body === '!ping') { message.reply('pong'); console.log('\t✅ Replying `pong` to command `!ping`'); }
+		handleHealthCheckPingMessage(message); // reply to my own !ping command
 		const chat = await message.getChat();
 
 		const isToSahil = message.to === sahilChatId;

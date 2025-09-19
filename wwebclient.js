@@ -29,7 +29,16 @@ const sahilNumber = "918360267243"; const sahilChatId = phoneToChatId(sahilNumbe
 const ratanNumber = "918699621565"; const ratanChatId = phoneToChatId(ratanNumber);
 const himanshuNumber = "918847037612"; const himanshuChatId = phoneToChatId(himanshuNumber);
 
+const handleHealthCheckPingMessage = (message) => {
+    // ✅ Bot Health Check Command: Reply back "pong" directly to the message
+    if (message.body === '!ping') {
+        message.reply('pong');
+        console.log('\t✅ Replying `pong` to command `!ping`');
+    }
+};
+
 module.exports = {
     client, clientId, sahilClientId, tfbrClientId,
     sahilChatId, ratanChatId, himanshuChatId,
+    handleHealthCheckPingMessage,
 };

@@ -1,7 +1,7 @@
 // @ts-nocheck
 const qrcode = require('qrcode-terminal');
 const { MessageMedia } = require('whatsapp-web.js');
-const { client, clientId, sahilChatId } = require('./wwebclient');
+const { client, clientId, sahilChatId, handleHealthCheckPingMessage } = require('./wwebclient');
 const { preventPunyCodeWarning, logMessageReceived, logMessageSend } = require('./log-utils');
 
 preventPunyCodeWarning();
@@ -45,6 +45,7 @@ const IMAGE_URL = 'https://avatars.githubusercontent.com/u/31458531';
 // ❤️ Emitted when a new message is received.
 client.on('message', async (message) => {
 	logMessageReceived(message);
+	handleHealthCheckPingMessage(message); // reply to any other user's !ping command
 	if (isGreeting(message.body)) {
 		// Learn: 1. Reply method
 		// await message.reply(MESSAGE)
@@ -75,8 +76,7 @@ client.on('message', async (message) => {
 client.on('message_create', (message) => {  // src: https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
 	if (message.fromMe) { // Only handle messages sent by you (not incoming)
 		logMessageSend(message);
-		// ✅ Bot Health Check Command: Reply back "pong" directly to the message
-		if (message.body === '!ping') { message.reply('pong'); console.log('\t✅ Replying `pong` to command `!ping`'); }
+		handleHealthCheckPingMessage(message); // reply to my own !ping command
 	}
 });
 
