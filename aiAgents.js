@@ -22,12 +22,9 @@ const aiAgents = {
     // 	for testing purpose for now.
     salesmanChat: createSalesmanChat()
 };
-async function resetSalesmanChat(params) {
-    aiAgents.salesmanChat = createSalesmanChat();
-}
 async function handleMessageBySalesman(message) {
     if (message.body === '!reset') {
-        resetSalesmanChat();
+        aiAgents.salesmanChat = createSalesmanChat(); // Reset salesman
         const chat = await message.getChat();
         await chat.sendMessage(`${AI_BOT_FLAG}: Reset ✅`);
     }
@@ -50,4 +47,4 @@ async function handleMessageBySalesman(message) {
 
 
 
-module.exports = { aiAgents, handleMessageBySalesman, resetSalesmanChat, GOOGLE_API_KEY, AI_BOT_FLAG };
+module.exports = { aiAgents, handleMessageBySalesman, GOOGLE_API_KEY, AI_BOT_FLAG };
