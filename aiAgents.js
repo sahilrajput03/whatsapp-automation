@@ -8,7 +8,7 @@ const ai = new GoogleGenAI({ apiKey: GOOGLE_API_KEY });
 
 const AI_BOT_FLAG = "Piku 🌸";
 
-const initializeSalesmanChat = () => ai.chats.create({
+const createSalesmanChat = () => ai.chats.create({
     model: "gemini-2.5-flash",
     config: {
         // System Prompt: https://chatgpt.com/c/68c193d1-a0c8-8328-806d-074d71a4c931
@@ -20,14 +20,15 @@ const aiAgents = {
     // Note: I'm keeing `aiSalesmanChat` outisde of `handleMessageBySalesman` as its helpful
     // 	to have context previous history without having to save to database
     // 	for testing purpose for now.
-    salesmanChat: initializeSalesmanChat()
+    salesmanChat: createSalesmanChat()
 };
 async function resetSalesmanChat(params) {
-    aiAgents.salesmanChat = initializeSalesmanChat();
+    aiAgents.salesmanChat = createSalesmanChat();
 }
 async function handleMessageBySalesman(message) {
     if (message.body === '!reset') {
         resetSalesmanChat();
+        const chat = await message.getChat();
         await chat.sendMessage(`${AI_BOT_FLAG}: Reset ✅`);
     }
     else {
