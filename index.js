@@ -3,6 +3,8 @@ const qrcode = require('qrcode-terminal');
 const { MessageMedia } = require('whatsapp-web.js');
 const { client, clientId, sahilChatId, handleHealthCheckPingMessage } = require('./wwebclient');
 const { preventPunyCodeWarning, logMessageReceived, logMessageSend } = require('./log-utils');
+require('dotenv').config(); // This must be caled before aiAgents because that file reads environment variables.
+const { handleMessageBySalesman, GOOGLE_API_KEY } = require('./aiAgents');
 
 preventPunyCodeWarning();
 
@@ -36,7 +38,7 @@ client.on('ready', async () => {
 	// setTimeout(async () => { await chat.clearState(); }, 3_000);
 
 	//  ✅ Send message on startup...
-	client.sendMessage(sahilChatId, "Hello, I am ready to help you! (automated message from the bot).");
+	// client.sendMessage(sahilChatId, "Hello, I am ready to help you! (automated message from the bot).");
 });
 
 const MESSAGE = 'I am Sahil, how can I help you?';
@@ -46,6 +48,12 @@ const IMAGE_URL = 'https://avatars.githubusercontent.com/u/31458531';
 client.on('message', async (message) => {
 	logMessageReceived(message);
 	handleHealthCheckPingMessage(message); // reply to any other user's !ping command
+
+	const isFromSpecificNumber = message.from === '****8';
+	if (isFromSpecificNumber) {
+		await handleMessageBySalesman(message);
+	}
+
 	if (isGreeting(message.body)) {
 		// Learn: 1. Reply method
 		// await message.reply(MESSAGE)
@@ -73,9 +81,17 @@ client.on('message', async (message) => {
 // const chat = await client.getChatById(message.from)	// way 2
 
 // ❤️ Emitted when a new message is created, which may include the current user's own messages.
-client.on('message_create', (message) => {  // src: https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
+client.on('message_create', async (message) => {  // src: https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
 	if (message.fromMe) { // Only handle messages sent by you (not incoming)
 		logMessageSend(message);
+		await handleMessageBySalesman(message);
+
+		// Message Deletion
+		// Delete for everyone and shows generic "You deleted this message" greyed out message.
+		if (message.body === '1') { setTimeout(() => message.delete(true), 500); }
+		// Delete for me only (Note: The message stays on other user's chat)
+		if (message.body === '2') { setTimeout(() => message.delete(), 500); }
+
 		handleHealthCheckPingMessage(message); // reply to my own !ping command
 	}
 });

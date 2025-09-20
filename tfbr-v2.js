@@ -9,15 +9,12 @@ const { yceSnippets } = require('./yce-snippets');
 const { client, clientId, tfbrClientId, sahilChatId, handleHealthCheckPingMessage } = require('./wwebclient');
 const { getPhoneNumberFromChatId } = require('./utils');
 const { GoogleGenAI } = require("@google/genai");
+require('dotenv').config(); // This must be caled before aiAgents because that file reads environment variables.
+const { handleMessageBySalesman, GOOGLE_API_KEY, AI_BOT_FLAG } = require('./aiAgents');
 
-require('dotenv').config();
 
 // ✅ This is to make sure I use tfbr's number in this file.
 if (clientId !== tfbrClientId) { throw "❌Please use tfbr's clientId."; }
-
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || "";
-if (!GOOGLE_API_KEY) { throw new Error('❌GOOGLE_API_KEY environment variable is not set.'); }
-const ai = new GoogleGenAI({ apiKey: GOOGLE_API_KEY });
 
 const PREFIX = "yes.";
 const yceSnippetsTerms = Object.keys(yceSnippets).map(s => PREFIX + s);
@@ -82,28 +79,6 @@ client.on('qr', (qr) => { qrcode.generate(qr, { small: true }); });
 
 client.on('ready', async () => { console.log('Client is ready!'); });
 
-
-// Note: I'm keeing this outisde of `handleMessageBySalesman` as its helpful
-// 	to have context previous history without having to save to database
-// 	for testing purpose for now.
-const aiChatSalesman = ai.chats.create({
-	model: "gemini-2.5-flash",
-	config: {
-		// System Prompt: https://chatgpt.com/c/68c193d1-a0c8-8328-806d-074d71a4c931
-		systemInstruction: "You are a friendly sales agent for YES PRINT. Talk in short Hinglish. Answer customer queries, suggest printing services (pamphlets, posters, banners, lamination, etc.), give prices if asked, and encourage quick orders. Keep replies simple, clear, and professional.",
-	}
-});
-async function handleMessageBySalesman(message) {
-	const chat = await message.getChat();
-	try {
-		const response1 = await aiChatSalesman.sendMessage({ message: message.body });
-		await chat.sendMessage(`${AI_BOT_FLAG}: ${response1.text}`);
-		// console.log("✅ Chat response 1:", response1.text);
-	} catch (error) {
-		console.log('ERROR ❌❌ ❌ ❌ ❌ ❌ ❌  ', error.toString());
-	}
-}
-
 // ❤️ Emitted when a new message is received.
 client.on('message', async (message) => {
 	logMessageReceived(message);
@@ -120,8 +95,6 @@ client.on('message', async (message) => {
 	// 	await handleMessageBySalesman(message);
 	// }
 });
-
-const AI_BOT_FLAG = "Piku 🌸";
 
 // ❤️ Emitted when a new message is created, which may include the current user's own messages.
 client.on('message_create', async (message) => {  // src:https://chatgpt.com/c/68bdc513-35b0-832b-83dd-32b11a324bbe 
@@ -141,6 +114,7 @@ client.on('message_create', async (message) => {  // src:https://chatgpt.com/c/6
 			// Using AI to reply:
 			// Note: We must create the instance each time otherwise it stores
 			// 		all previous messages which is not what I want for now.
+			const ai = new GoogleGenAI({ apiKey: GOOGLE_API_KEY });
 			const aiChat = ai.chats.create({ model: "gemini-2.5-flash" });
 			const response1 = await aiChat.sendMessage({ message: message.body });
 			// console.log("✅ Chat response 1:", response1.text);
