@@ -1,5 +1,7 @@
 # Learn `whatsapp-web.js`
 
+**_🚀✅NOTE: I successfully saved session to mongodb following docs of wweb.js and it works good - though its of no use for me because the session can only be used on one system at a time._**
+
 **Quick Links:**
 
 - Inspiration: https://youtu.be/iovH8bwSCWY
