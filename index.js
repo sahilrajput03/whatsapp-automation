@@ -1,9 +1,8 @@
 // @ts-nocheck
+const { client, clientId, sahilChatId, handleHealthCheckPingMessage } = require('./wwebclient');
 const qrcode = require('qrcode-terminal');
 const { MessageMedia } = require('whatsapp-web.js');
-const { client, clientId, sahilChatId, handleHealthCheckPingMessage } = require('./wwebclient');
 const { preventPunyCodeWarning, logMessageReceived, logMessageSend } = require('./log-utils');
-require('dotenv').config(); // This must be caled before aiAgents because that file reads environment variables.
 const { handleMessageBySalesman, GOOGLE_API_KEY } = require('./aiAgents');
 
 preventPunyCodeWarning();

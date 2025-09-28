@@ -1,6 +1,6 @@
 // @ts-nocheck
-const qrcode = require('qrcode-terminal');
 const { client, clientId, tfbrClientId, sahilChatId } = require('./wwebclient');
+const qrcode = require('qrcode-terminal');
 const { MessageMedia } = require('whatsapp-web.js');
 const { preventPunyCodeWarning, logMessageReceived } = require('./log-utils');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link

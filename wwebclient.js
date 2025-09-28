@@ -1,5 +1,6 @@
 // @ts-nocheck
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+require('dotenv').config({ quiet: true });
 
 // * Learn: We can create multiple wa bots using `const client2 = new Client(...)` (src: https://wwebjs.dev/guide/creating-your-bot/authentication.html#location-path )
 // * Learn: Storing your auth session to dabase like mongodb ❤️: https://wwebjs.dev/guide/creating-your-bot/authentication.html#remote-stores
@@ -11,10 +12,11 @@ const sahilClientId = 'sahil'; // unique ID per number
 const tfbrClientId = 'topfivebestrated'; // unique ID per number 
 // ! Add a check before commiting via `git commit hook` so that I never commit without clientid as `topfivebestrated`
 
-// const clientId = sahilClientId;
-const clientId = tfbrClientId;
+const clientId = process.env.CLIENT_ID;
 
 const client = new Client({
+    // Src: https://wwebjs.dev/guide/creating-your-bot/authentication.html
+    puppeteer: { args: ['--no-sandbox', /*'--disable-setuid-sandbox' NOT_NEEDED_NOW-----SAHIL*/], },
     authStrategy: new LocalAuth({
         // * Note: 'sahil' for my personal and 'topfivebestrated' for himanshu's bot.
         clientId: clientId,

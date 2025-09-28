@@ -1,4 +1,5 @@
 // @ts-nocheck
+const { client, clientId, tfbrClientId, sahilChatId, handleHealthCheckPingMessage } = require('./wwebclient');
 const express = require('express');
 const { preventPunyCodeWarning, logMessageReceived, logMessageSend } = require('./log-utils');
 const { default: axios } = require('axios');
@@ -6,10 +7,8 @@ const qrcode = require('qrcode-terminal');
 const { MessageMedia } = require('whatsapp-web.js');
 // https://wa.me/918360267243?text=hello%20world // Simple whatsapp link
 const { yceSnippets } = require('./yce-snippets');
-const { client, clientId, tfbrClientId, sahilChatId, handleHealthCheckPingMessage } = require('./wwebclient');
 const { getPhoneNumberFromChatId } = require('./utils');
 const { GoogleGenAI } = require("@google/genai");
-require('dotenv').config(); // This must be caled before aiAgents because that file reads environment variables.
 const { handleMessageBySalesman, GOOGLE_API_KEY, AI_BOT_FLAG } = require('./aiAgents');
 
 
