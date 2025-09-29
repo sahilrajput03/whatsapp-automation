@@ -12,7 +12,8 @@
 
 # Hosting on linode
 
-- Ram Computation: **330 mb**
+- Issue of whatsappweb.js fixed on archlinux on linode server via: `sudo pacman -S chromium`. [TESTED].
+- Ram Usage: **330 mb**
 
 How did I finally able to login?
 
