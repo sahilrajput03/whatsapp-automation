@@ -1,5 +1,7 @@
 # Learn `whatsapp-web.js`
 
+**❤️TODO: Checkout another less popular similar library - [github.com/open-wa/wa-automate-nodejs](https://github.com/open-wa/wa-automate-nodejs) 3.4k**
+
 **_🚀✅NOTE: I successfully saved session to mongodb following docs of wweb.js and it works good - though its of no use for me because the session can only be used on one system at a time._**
 
 **Quick Links:**
