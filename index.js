@@ -1,5 +1,5 @@
 // @ts-nocheck
-const { client, clientId, sahilChatId, handleHealthCheckPingMessage } = require('./wwebclient');
+const { client, clientId, sahilChatId, groupYceWhatsappAPIChatId, handleHealthCheckPingMessage } = require('./wwebclient');
 const qrcode = require('qrcode-terminal');
 const { MessageMedia } = require('whatsapp-web.js');
 const { preventPunyCodeWarning, logMessageReceived, logMessageSend } = require('./log-utils');
@@ -38,6 +38,9 @@ client.on('ready', async () => {
 
 	//  ✅ Send message on startup...
 	// client.sendMessage(sahilChatId, "Hello, I am ready to help you! (automated message from the bot).");
+
+	//  ✅ Send message to group on startup...
+	client.sendMessage(groupYceWhatsappAPIChatId, "pong-test");
 });
 
 const MESSAGE = 'I am Sahil, how can I help you?';

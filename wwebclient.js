@@ -30,6 +30,7 @@ const phoneToChatId = (phone) => phone + "@c.us";
 const sahilNumber = "918360267243"; const sahilChatId = phoneToChatId(sahilNumber);
 const ratanNumber = "918699621565"; const ratanChatId = phoneToChatId(ratanNumber);
 const himanshuNumber = "918847037612"; const himanshuChatId = phoneToChatId(himanshuNumber);
+const groupYceWhatsappAPIChatId = "120363421828061554@g.us";
 
 const handleHealthCheckPingMessage = (message) => {
     // ✅ Bot Health Check Command: Reply back "pong" directly to the message
@@ -41,6 +42,6 @@ const handleHealthCheckPingMessage = (message) => {
 
 module.exports = {
     client, clientId, sahilClientId, tfbrClientId,
-    sahilChatId, ratanChatId, himanshuChatId,
+    sahilChatId, ratanChatId, himanshuChatId, groupYceWhatsappAPIChatId,
     handleHealthCheckPingMessage,
 };
