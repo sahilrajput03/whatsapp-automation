@@ -212,7 +212,7 @@ app.get('/yce-whatsapp-qr-data', async (req, res) => {
 				<br/> <div style="width: 300px;">${qrHtml}</div> ${restartAndRefreshButtonsHtml}`));
 		} else {
 			res.send(createHtmlPage(`
-				<h2 style="margin-top: 30px;"> Server is starting... 🚀 <br /> Please refresh page after 10 seconds.  </h2>	
+				<h2 style="margin-top: 30px;"> Server is starting... 🚀 <br /> Wait for 10 seconds then refresh the page.  </h2>	
 				<br /> <br /> ${restartAndRefreshButtonsHtml}`));
 		}
 	}
