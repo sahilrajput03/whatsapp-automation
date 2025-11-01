@@ -201,14 +201,14 @@ app.get('/yce-whatsapp-qr-data', async (req, res) => {
 			// Inspiration - https://chatgpt.com/c/6905d599-9fb4-8321-8864-6a32fc832f44
 			const qrHtml = await QRCode.toString(yceWhatsAppQrData, { type: 'svg' });
 			res.send(`<html><body style="width: 300px;">
-				After, scanning please wait for 10 seconds and refersh the page to verify if login successful.
+				After, scanning please wait for 10 seconds and refresh the page to verify if login successful.
 				<br/>
 				${qrHtml}
 
-				<button onclick="fetch('${botRestartApi + '/api/v1/restart-yce-bot'}'); alert('Please refersh the page after 30 seconds to check login status.');">Restart</buttton>
+				<button onclick="fetch('${botRestartApi + '/api/v1/restart-yce-bot'}'); alert('Please refresh the page after 30 seconds to check login status.');">Restart</buttton>
 				</body></html>`);
 		} else {
-			res.send(`Please refresh after 10 seconds to get the QR code.`);
+			res.send(`Please refresh after 10 seconds.`);
 		}
 	}
 });
