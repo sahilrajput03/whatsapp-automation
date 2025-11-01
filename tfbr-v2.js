@@ -14,7 +14,7 @@ const QRCode = require('qrcode');
 
 
 // ✅ This is to make sure I use tfbr's number in this file.
-if (clientId !== tfbrClientId) { throw "❌Please use tfbr's clientId."; }
+// if (clientId !== tfbrClientId) { throw "❌Please use tfbr's clientId."; }
 
 const PREFIX = "yes.";
 const yceSnippetsTerms = Object.keys(yceSnippets).map(s => PREFIX + s);
@@ -200,16 +200,18 @@ app.get('/yce-whatsapp-qr-data', async (req, res) => {
 	<button onclick="fetch('${botRestartApi + '/api/v1/restart-yce-bot'}'); alert('Please refresh the page after 30 seconds to check login status.');">Restart bot server</button>
 	`;
 	if (isLoggedIn) {
-		res.send(createHtmlPage(`Loging successful✅ <br/> ${restartAndRefreshButtonsHtml}`));
+		res.send(createHtmlPage(`<h2 style="margin-top: 30px;"> Loging successful ✅</h2>	
+			 <br/> ${restartAndRefreshButtonsHtml}`));
 	} else {
 		if (yceWhatsAppQrData) {
 			// Inspiration - https://chatgpt.com/c/6905d599-9fb4-8321-8864-6a32fc832f44
 			const qrHtml = await QRCode.toString(yceWhatsAppQrData, { type: 'svg' });
 			res.send(createHtmlPage(`
-				After, scanning please wait for 10 seconds and refresh the page to verify if login successful.
+				<h2 style="margin-top: 30px;">After, scanning please wait for 10 seconds and refresh the page to verify if login successful.</h2>
 				<br/> <div style="width: 300px;">${qrHtml}</div> ${restartAndRefreshButtonsHtml}`));
 		} else {
-			res.send(createHtmlPage(`Please refresh page after 10 seconds.
+			res.send(createHtmlPage(`
+				<h2 style="margin-top: 30px;"> Please refresh page after 10 seconds.  </h2>	
 				<br /> <br /> ${restartAndRefreshButtonsHtml}`));
 		}
 	}
