@@ -40,8 +40,13 @@ const handleHealthCheckPingMessage = (message) => {
     }
 };
 
+function createHtmlPage(body) {
+    const headTag = `<head> <meta name="viewport" content="width=device-width, initial-scale=1.0"> </head>`;
+    return `<html> ${headTag} <body> ${body} </body> </html>`;
+}
+
 module.exports = {
     client, clientId, sahilClientId, tfbrClientId,
     sahilChatId, ratanChatId, himanshuChatId, groupYceWhatsappAPIChatId,
-    handleHealthCheckPingMessage,
+    handleHealthCheckPingMessage, createHtmlPage
 };

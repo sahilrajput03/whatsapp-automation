@@ -1,5 +1,5 @@
 // @ts-nocheck
-const { client, clientId, tfbrClientId, sahilChatId, handleHealthCheckPingMessage } = require('./wwebclient');
+const { client, clientId, tfbrClientId, sahilChatId, handleHealthCheckPingMessage, createHtmlPage } = require('./wwebclient');
 const express = require('express');
 const { preventPunyCodeWarning, logMessageReceived, logMessageSend } = require('./log-utils');
 const { default: axios } = require('axios');
@@ -193,22 +193,24 @@ app.get('/', (req, res) => { res.send('ok'); });
 
 const isSahilMacbook = process.env.USER === 'apple';
 app.get('/yce-whatsapp-qr-data', async (req, res) => {
+	const botRestartApi = isSahilMacbook ? 'https://api-dev.mypot.in' : 'https://api.mypot.in';
+	const restartAndRefreshButtonsHtml = `
+	<button onclick="window.location.reload();">Refresh Page</button>
+	<br /> <br />
+	<button onclick="fetch('${botRestartApi + '/api/v1/restart-yce-bot'}'); alert('Please refresh the page after 30 seconds to check login status.');">Restart bot server</button>
+	`;
 	if (isLoggedIn) {
-		res.send(`Loging successful✅`);
+		res.send(createHtmlPage(`Loging successful✅ <br/> ${restartAndRefreshButtonsHtml}`));
 	} else {
 		if (yceWhatsAppQrData) {
-			const botRestartApi = isSahilMacbook ? 'https://api-dev.mypot.in' : 'https://api.mypot.in';
 			// Inspiration - https://chatgpt.com/c/6905d599-9fb4-8321-8864-6a32fc832f44
 			const qrHtml = await QRCode.toString(yceWhatsAppQrData, { type: 'svg' });
-			res.send(`<html><body style="width: 300px;">
+			res.send(createHtmlPage(`
 				After, scanning please wait for 10 seconds and refresh the page to verify if login successful.
-				<br/>
-				${qrHtml}
-
-				<button onclick="fetch('${botRestartApi + '/api/v1/restart-yce-bot'}'); alert('Please refresh the page after 30 seconds to check login status.');">Restart</buttton>
-				</body></html>`);
+				<br/> <div style="width: 300px;">${qrHtml}</div> ${restartAndRefreshButtonsHtml}`));
 		} else {
-			res.send(`Please refresh after 10 seconds.`);
+			res.send(createHtmlPage(`Please refresh page after 10 seconds.
+				<br /> <br /> ${restartAndRefreshButtonsHtml}`));
 		}
 	}
 });
