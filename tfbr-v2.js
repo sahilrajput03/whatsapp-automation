@@ -1,5 +1,5 @@
 // @ts-nocheck
-const { client, clientId, tfbrClientId, sahilChatId, handleHealthCheckPingMessage, createHtmlPage } = require('./wwebclient');
+const { client, clientId, tfbrClientId, sahilChatId, handleHealthCheckPingMessage, createHtmlPage, isSahilMacbook } = require('./wwebclient');
 const express = require('express');
 const { preventPunyCodeWarning, logMessageReceived, logMessageSend } = require('./log-utils');
 const { default: axios } = require('axios');
@@ -13,8 +13,10 @@ const { handleMessageBySalesman, GOOGLE_API_KEY, AI_BOT_FLAG } = require('./aiAg
 const QRCode = require('qrcode');
 
 
-// ✅ This is to make sure I use tfbr's number in this file.
-if (clientId !== tfbrClientId) { throw "❌Please use tfbr's clientId."; }
+if (!isSahilMacbook) {
+	// ✅ This is to make sure I use tfbr's number in this file.
+	if (clientId !== tfbrClientId) { throw "❌Please use tfbr's clientId."; }
+}
 
 const PREFIX = "yes.";
 const yceSnippetsTerms = Object.keys(yceSnippets).map(s => PREFIX + s);
@@ -191,7 +193,6 @@ app.listen(PORT, () => { console.log('🚀Server started on:', `http://localhost
 app.use(express.json()); // To accept json data (source: https://expressjs.com/en/api.html#express.json)
 app.get('/', (req, res) => { res.send('ok'); });
 
-const isSahilMacbook = process.env.USER === 'apple';
 app.get('/yce-whatsapp-qr-data', async (req, res) => {
 	const botRestartApi = isSahilMacbook ? 'https://api-dev.mypot.in' : 'https://api.mypot.in';
 	const restartAndRefreshButtonsHtml = `

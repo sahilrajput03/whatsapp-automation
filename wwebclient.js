@@ -47,8 +47,10 @@ function createHtmlPage(body) {
     return `<html> ${headTag} <body> ${body} </body> </html>`;
 }
 
+const isSahilMacbook = process.env.USER === 'apple';
+
 module.exports = {
     client, clientId, sahilClientId, tfbrClientId,
     sahilChatId, ratanChatId, himanshuChatId, groupYceWhatsappAPIChatId,
-    handleHealthCheckPingMessage, createHtmlPage
+    handleHealthCheckPingMessage, createHtmlPage, isSahilMacbook
 };
