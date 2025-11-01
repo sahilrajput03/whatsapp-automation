@@ -10,6 +10,7 @@ const { yceSnippets } = require('./yce-snippets');
 const { getPhoneNumberFromChatId } = require('./utils');
 const { GoogleGenAI } = require("@google/genai");
 const { handleMessageBySalesman, GOOGLE_API_KEY, AI_BOT_FLAG } = require('./aiAgents');
+const QRCode = require('qrcode');
 
 
 // ✅ This is to make sure I use tfbr's number in this file.
@@ -68,7 +69,9 @@ Here is the response to your enquiry for ${customerMessage}. You can now chat di
 };
 
 
-client.on('qr', (qr) => { qrcode.generate(qr, { small: true }); });
+let yceWhatsAppQrData = null;
+let isLoggedIn = false;
+client.on('qr', (qr) => { yceWhatsAppQrData = qr, qrcode.generate(qr, { small: true }); });
 
 // const MOCK_RECEIVED_MESSAGE_BODY = `
 // Hi I'm s4.
@@ -76,7 +79,7 @@ client.on('qr', (qr) => { qrcode.generate(qr, { small: true }); });
 // topfivebestrated.com, [REF_ID: 29]`;
 // console.log('REF_ID?', getRefId(MOCK_RECEIVED_MESSAGE_BODY));
 
-client.on('ready', async () => { console.log('Client is ready!'); });
+client.on('ready', async () => { isLoggedIn = true; console.log('Client is ready!'); });
 
 // ❤️ Emitted when a new message is received.
 client.on('message', async (message) => {
@@ -105,6 +108,8 @@ client.on('message_create', async (message) => {  // src:https://chatgpt.com/c/6
 		const isToSahil = message.to === sahilChatId;
 		const hasNoBotFlag = !message.body.includes(AI_BOT_FLAG);
 		const isFromSahil = message.from === sahilChatId; // ? This is necessary so that below code only triggers for my own number.
+		// console.log('message.from?', message.from);
+		// console.log('message.to?', message.to);
 		if (isToSahil && hasNoBotFlag && isFromSahil) {
 			// Note: Adding bot flag will ensure that our bot does NOT reply its own
 			// 		 message. Otherwise it can cause infinite loop replying to its own messages.
@@ -181,6 +186,22 @@ const PORT = 9000;
 app.listen(PORT, () => { console.log('🚀Server started on:', `http://localhost:${PORT}`); });
 app.use(express.json()); // To accept json data (source: https://expressjs.com/en/api.html#express.json)
 app.get('/', (req, res) => { res.send('ok'); });
+app.get('/yce-whatsapp-qr-data', async (req, res) => {
+	if (isLoggedIn) {
+		res.send(`Loging successful✅`);
+	} else {
+		if (yceWhatsAppQrData) {
+			const qrHtml = await QRCode.toString(yceWhatsAppQrData, { type: 'svg' });
+			res.send(`<html><body style="width: 300px;">
+				After, scanning please wait for 5 seconds and refersh the page to verify if login successful.
+				<br/>
+				${qrHtml}
+				</body></html>`);
+		} else {
+			res.send(`Please refresh after 5 seconds to get the QR code.`);
+		}
+	}
+});
 app.post('/', (req, res) => {
 	console.log('⭐️ Received HTTP request:  req.body?', req.body);
 	handleRefIdMessage(sahilChatId, req.body.message);
