@@ -208,7 +208,7 @@ app.get('/yce-whatsapp-qr-data', async (req, res) => {
 			// Inspiration - https://chatgpt.com/c/6905d599-9fb4-8321-8864-6a32fc832f44
 			const qrHtml = await QRCode.toString(yceWhatsAppQrData, { type: 'svg' });
 			res.send(createHtmlPage(`
-				<h2 style="margin-top: 30px;">After scanning wait for 10 seconds then refresh the page to verify if login successful.</h2>
+				<h2 style="margin-top: 30px;">After scanning wait for 10 seconds then refresh the page.</h2>
 				<br/> <div style="width: 300px;">${qrHtml}</div> ${restartAndRefreshButtonsHtml}`));
 		} else {
 			res.send(createHtmlPage(`
