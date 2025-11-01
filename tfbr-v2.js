@@ -79,7 +79,11 @@ client.on('qr', (qr) => { yceWhatsAppQrData = qr, qrcode.generate(qr, { small: t
 // topfivebestrated.com, [REF_ID: 29]`;
 // console.log('REF_ID?', getRefId(MOCK_RECEIVED_MESSAGE_BODY));
 
-client.on('ready', async () => { isLoggedIn = true; console.log('Client is ready!'); });
+client.on('ready', async () => {
+	isLoggedIn = true;
+	console.log('Client is ready!');
+	client.sendMessage(groupYceWhatsappAPIChatId, "Topfivebestrated WhatsApp Bot started successfully ✅.");
+});
 
 // ❤️ Emitted when a new message is received.
 client.on('message', async (message) => {
