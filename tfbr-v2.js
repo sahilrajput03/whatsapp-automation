@@ -191,6 +191,7 @@ app.get('/yce-whatsapp-qr-data', async (req, res) => {
 		res.send(`Loging successful✅`);
 	} else {
 		if (yceWhatsAppQrData) {
+			// Inspiration - https://chatgpt.com/c/6905d599-9fb4-8321-8864-6a32fc832f44
 			const qrHtml = await QRCode.toString(yceWhatsAppQrData, { type: 'svg' });
 			res.send(`<html><body style="width: 300px;">
 				After, scanning please wait for 5 seconds and refersh the page to verify if login successful.
