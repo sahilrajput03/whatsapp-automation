@@ -195,25 +195,22 @@ app.get('/', (req, res) => { res.send('ok'); });
 
 app.get('/yce-whatsapp-qr-data', async (req, res) => {
 	const botRestartApi = isSahilMacbook ? 'https://api-dev.mypot.in' : 'https://api.mypot.in';
-	const restartAndRefreshButtonsHtml = `
-	<button onclick="window.location.reload();">Refresh Page</button>
-	<br /> <br />
-	<button onclick="fetch('${botRestartApi + '/api/v1/restart-yce-bot'}'); alert('Please refresh the page after 30 seconds to check login status.');">Restart bot server</button>
-	`;
+	const restartButtonEl = `<button onclick="fetch('${botRestartApi + '/api/v1/restart-yce-bot'}');">Restart bot server</button>`;
+	const refreshAfterFewSeconds = `<script> setTimeout(() => window.location.reload(), 10_000)</script>`;
 	if (isLoggedIn) {
 		res.send(createHtmlPage(`<h2 style="margin-top: 30px;"> Loging successful ✅</h2>	
-			 <br/> ${restartAndRefreshButtonsHtml}`));
+			 <br/> ${restartButtonEl} ${refreshAfterFewSeconds}`));
 	} else {
 		if (yceWhatsAppQrData) {
 			// Inspiration - https://chatgpt.com/c/6905d599-9fb4-8321-8864-6a32fc832f44
 			const qrHtml = await QRCode.toString(yceWhatsAppQrData, { type: 'svg' });
 			res.send(createHtmlPage(`
-				<h2 style="margin-top: 30px;">After scanning wait for 10 seconds then refresh the page.</h2>
-				<br/> <div style="width: 300px;">${qrHtml}</div> ${restartAndRefreshButtonsHtml}`));
+				<h2 style="margin-top: 30px;">Please scan via whatsapp</h2>
+				<br/> <div style="width: 300px;">${qrHtml}</div> ${restartButtonEl} ${refreshAfterFewSeconds}`));
 		} else {
 			res.send(createHtmlPage(`
-				<h2 style="margin-top: 30px;"> Server is starting... 🚀 <br /> Wait for 10 seconds then refresh the page.  </h2>	
-				<br /> <br /> ${restartAndRefreshButtonsHtml}`));
+				<h2 style="margin-top: 30px;"> Server is starting... 🚀 <br /> </h2>	
+				<br /> <br /> ${restartButtonEl} ${refreshAfterFewSeconds}`));
 		}
 	}
 });
