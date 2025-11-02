@@ -195,7 +195,8 @@ app.get('/', (req, res) => { res.send('ok'); });
 
 app.get('/yce-whatsapp-qr-data', async (req, res) => {
 	const botRestartApi = isSahilMacbook ? 'https://api-dev.mypot.in' : 'https://api.mypot.in';
-	const restartButtonEl = `<button onclick="fetch('${botRestartApi + '/api/v1/restart-yce-bot'}');">Restart bot server</button>`;
+	const restartButtonEl = `
+	<button id="restart-btn" onclick="fetch('${botRestartApi + '/api/v1/restart-yce-bot'}'); document.querySelector('#restart-btn').innerHTML='Server is restarting now ✅'; document.querySelector('#restart-btn').disabled=true;">Restart bot server</button>`;
 	const refreshAfterFewSeconds = `<script> setTimeout(() => window.location.reload(), 10_000)</script>`;
 	if (isLoggedIn) {
 		res.send(createHtmlPage(`<h2 style="margin-top: 30px;"> Loging successful ✅</h2>	
