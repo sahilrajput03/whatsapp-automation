@@ -188,7 +188,7 @@ Visit www.topfivebestrated.com for more info about your business. Thank you!
 
 // 🚀 🚀 🚀 Ulta Fast Testing 🚀 🚀 
 const app = express();
-const PORT = 9001; // Access on Linode via --- http://mypot.in:9001/yce-whatsapp-qr-data
+const PORT = 9001; // Access on Linode via --- https://yce.mypot.in/yce-whatsapp-qr-data
 app.listen(PORT, () => { console.log('🚀Server started on:', `http://localhost:${PORT}`); });
 app.use(express.json()); // To accept json data (source: https://expressjs.com/en/api.html#express.json)
 app.get('/', (req, res) => { res.send('ok'); });
