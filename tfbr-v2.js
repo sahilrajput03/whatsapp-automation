@@ -86,7 +86,7 @@ client.on('ready', async () => {
 	console.log('Client is ready!');
 	setTimeout(() => {
 		// Adding delay hoping that this would be helpful when sometimes below message is not sent.
-		client.sendMessage(groupYceWhatsappAPIChatId, "[__TESTING__] Topfivebestrated WhatsApp Bot started successfully ✅.");
+		client.sendMessage(groupYceWhatsappAPIChatId, `${isSahilMacbook ? "[__TESTING__]" : ""} Topfivebestrated WhatsApp Bot started successfully ✅.`);
 	}, 2_000);
 });
 
