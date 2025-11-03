@@ -11,7 +11,7 @@ const { getPhoneNumberFromChatId } = require('./utils');
 const { GoogleGenAI } = require("@google/genai");
 const { handleMessageBySalesman, GOOGLE_API_KEY, AI_BOT_FLAG } = require('./aiAgents');
 const QRCode = require('qrcode');
-
+const { execSync } = require('node:child_process');
 
 if (!isSahilMacbook) {
 	// ✅ This is to make sure I use tfbr's number in this file.
@@ -84,7 +84,10 @@ client.on('qr', (qr) => { yceWhatsAppQrData = qr, qrcode.generate(qr, { small: t
 client.on('ready', async () => {
 	isLoggedIn = true;
 	console.log('Client is ready!');
-	client.sendMessage(groupYceWhatsappAPIChatId, "Topfivebestrated WhatsApp Bot started successfully ✅.");
+	setTimeout(() => {
+		// Adding delay hoping that this would be helpful when sometimes below message is not sent.
+		client.sendMessage(groupYceWhatsappAPIChatId, "[__TESTING__] Topfivebestrated WhatsApp Bot started successfully ✅.");
+	}, 2_000);
 });
 
 // ❤️ Emitted when a new message is received.
@@ -192,26 +195,39 @@ const PORT = 9001; // Access on Linode via --- https://yce.mypot.in/yce-whatsapp
 app.listen(PORT, () => { console.log('🚀Server started on:', `http://localhost:${PORT}`); });
 app.use(express.json()); // To accept json data (source: https://expressjs.com/en/api.html#express.json)
 app.get('/', (req, res) => { res.send('ok'); });
+app.get('/restart', async (req, res) => { process.exit(1); });
+function logoutAndRestart() {
+	const output = execSync(`set -x\n rm -rf .wwebjs_*`);
+	console.log(`✅ Output: ${output.toString()}`);
+	process.exit(1);
+}
+// We delete cache and restart if there the client is not logged after a certain interval.
+setTimeout(() => { if (!isLoggedIn) { logoutAndRestart(); } }, 120_000);
+app.get('/logout-and-restart', logoutAndRestart);
 
+let uptime = 0;
+setInterval(() => { uptime += 10; }, 10_000);
 app.get('/yce-whatsapp-qr-data', async (req, res) => {
-	const botRestartApi = isSahilMacbook ? 'https://api-dev.mypot.in' : 'https://api.mypot.in';
 	const restartButtonEl = `
-	<button id="restart-btn" onclick="fetch('${botRestartApi + '/api/v1/restart-yce-bot'}'); document.querySelector('#restart-btn').innerHTML='Server is restarting now ✅'; document.querySelector('#restart-btn').disabled=true;">Restart bot server</button>`;
+	<button id="restart-btn" onclick="fetch('/restart'); $('#restart-btn').innerHTML='Server is restarting now ✅'; $('#restart-btn').disabled=true;">Restart bot server</button>`;
+	const logoutButtonEl = `
+	<button id="logout-and-restart-btn" onclick="fetch('/logout-and-restart'); $('#logout-and-restart-btn').innerHTML='Server is restarting now ✅'; $('#logout-and-restart-btn').disabled=true;">Logout and restart bot server</button>`;
 	const refreshAfterFewSeconds = `<script> setTimeout(() => window.location.reload(), 10_000)</script>`;
+
 	if (isLoggedIn) {
-		res.send(createHtmlPage(`<h2 style="margin-top: 30px;"> Loging successful ✅</h2>	
-			 <br/> ${restartButtonEl} ${refreshAfterFewSeconds}`));
+		res.send(createHtmlPage(`<h2 style="margin-top: 30px;"> Login successful ✅</h2>	
+			 <br/> ${restartButtonEl} ${logoutButtonEl} ${refreshAfterFewSeconds}`));
 	} else {
 		if (yceWhatsAppQrData) {
 			// Inspiration - https://chatgpt.com/c/6905d599-9fb4-8321-8864-6a32fc832f44
 			const qrHtml = await QRCode.toString(yceWhatsAppQrData, { type: 'svg' });
 			res.send(createHtmlPage(`
 				<h2 style="margin-top: 30px;">Please scan via whatsapp</h2>
-				<br/> <div style="width: 300px;">${qrHtml}</div> ${restartButtonEl} ${refreshAfterFewSeconds}`));
+				<br/> <div style="width: 300px;">${qrHtml}</div> ${restartButtonEl} ${logoutButtonEl} ${refreshAfterFewSeconds}`));
 		} else {
 			res.send(createHtmlPage(`
-				<h2 style="margin-top: 30px;"> Server is starting... 🚀 <br /> </h2>	
-				<br /> <br /> ${restartButtonEl} ${refreshAfterFewSeconds}`));
+				<h2 style="margin-top: 30px;"> Server is starting... 🚀   (Uptime: ${uptime} seconds) <br /> </h2>	
+				<br /> <br /> ${restartButtonEl} ${logoutButtonEl} ${refreshAfterFewSeconds}`));
 		}
 	}
 });
@@ -219,7 +235,7 @@ app.post('/', (req, res) => {
 	console.log('⭐️ Received HTTP request:  req.body?', req.body);
 	handleRefIdMessage(sahilChatId, req.body.message);
 	res.send('ok');
-})
+});
 
 
 /*
@@ -243,3 +259,13 @@ Hello Yce Network, This is Surbhi trying to connect with your business on topfiv
 - The enquiry message is as follows: hii
 Visit www.topfivebestrated.com for more info about your business. Thank you!
 */
+
+const handleUncaughtException = () => {
+	process.on('uncaughtException', (err) => {
+		const messg = `🛑Found uncaughtException: error.name: "${err.name}", error.message: "${err.message}"`;
+		console.error(messg);
+		console.error(err);
+		// process.exit(1) // We do not exit on an unhandled exception intentionally to prevent server crash
+	});
+};
+handleUncaughtException();

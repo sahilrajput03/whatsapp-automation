@@ -35,7 +35,7 @@ const groupYceWhatsappAPIChatId = "120363421828061554@g.us";
 const handleHealthCheckPingMessage = (message) => {
     // ✅ Bot Health Check Command: Reply back "pong" directly to the message
     if (message.body === '!ping') {
-        message.reply('pong');
+        message.reply('pong (via bot)');
         console.log('\t✅ Replying `pong` to command `!ping`');
     }
 };
@@ -44,7 +44,9 @@ const handleHealthCheckPingMessage = (message) => {
 //          otherwise we see very small text on mobile screens i.e., desktop layout.
 function createHtmlPage(body) {
     const headTag = `<head> <meta name="viewport" content="width=device-width, initial-scale=1.0"> </head>`;
-    return `<html> ${headTag} <body> ${body} </body> </html>`;
+    return `<html> ${headTag}
+    <script> const $ = document.querySelector.bind(document); const $$ = document.querySelectorAll.bind(document); </script> 
+    <body> ${body} </body> </html>`;
 }
 
 const isSahilMacbook = process.env.USER === 'apple';
