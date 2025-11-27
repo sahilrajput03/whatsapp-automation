@@ -1,6 +1,14 @@
 # Learn `whatsapp-web.js`
 
-**❤️❤️❤️❤️TODO: Checkout another less popular similar library - [github.com/open-wa/wa-automate-nodejs](https://github.com/open-wa/wa-automate-nodejs) 3.4k**
+**❤️❤️TODO: Checkout alternates:**
+1. [github.com/open-wa/wa-automate-nodejs](https://github.com/open-wa/wa-automate-nodejs) 3.4k* (134 Issues)
+2. [github.com/devlikeapro/waha](https://github.com/devlikeapro/waha) 5.3k* (294 Issues)
+
+**❤️❤️For whatsapp UI:** ([ChatGPT](https://chatgpt.com/c/69147401-ff58-8324-861e-ebc7f9d7d28b))
+- **Chatwoot**: [github.com/chatwoot/chatwoot](https://github.com/chatwoot/chatwoot) 26k* (5.5k Commits)
+  - Open-source live-chat, email support, omni-channel desk. An alternative to Intercom, Zendesk, Salesforce Service Cloud etc. 🔥💬
+- **Rocket.Chat**: [github.com/RocketChat/Rocket.Chat](https://github.com/RocketChat/Rocket.Chat) 43.9k*, (28k Commits)
+  - The communications platform that puts data protection first.
 
 **_🚀✅NOTE: I successfully saved session to mongodb following docs of wweb.js and it works good - though its of no use for me because the session can only be used on one system at a time._**
 
