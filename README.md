@@ -36,5 +36,5 @@ It succeeded! 🚀
 
 ```sh
 # Create pm2 app
-pm2 start nodemon --name tfbr -- --exitcrash tfbr-v2.js
+pm2 start nodemon --name tfbr --time -- --exitcrash tfbr-v2.js
 ```
