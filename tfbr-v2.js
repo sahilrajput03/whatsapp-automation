@@ -265,7 +265,8 @@ const handleUncaughtException = () => {
 		const messg = `🛑Found uncaughtException: error.name: "${err.name}", error.message: "${err.message}"`;
 		console.error(messg);
 		console.error(err);
-		// process.exit(1) // We do not exit on an unhandled exception intentionally to prevent server crash
+		// Learn: We must crash server on uncaught exception for tfbr repo so that pm2 restarts the server.
+		process.exit(1);
 	});
 };
 handleUncaughtException();
