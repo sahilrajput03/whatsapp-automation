@@ -202,6 +202,7 @@ function logoutAndRestart() {
 	process.exit(1);
 }
 // We delete cache and restart if there the client is not logged after a certain interval.
+// Learn: I was running this callback after 120 seconds (2mins) earlier and it was causing me issue.
 setTimeout(() => { if (!isLoggedIn) { logoutAndRestart(); } }, 300_000);
 app.get('/logout-and-restart', logoutAndRestart);
 
