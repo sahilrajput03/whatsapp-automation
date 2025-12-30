@@ -202,7 +202,7 @@ function logoutAndRestart() {
 	process.exit(1);
 }
 // We delete cache and restart if there the client is not logged after a certain interval.
-setTimeout(() => { if (!isLoggedIn) { logoutAndRestart(); } }, 120_000);
+setTimeout(() => { if (!isLoggedIn) { logoutAndRestart(); } }, 300_000);
 app.get('/logout-and-restart', logoutAndRestart);
 
 let uptime = 0;
