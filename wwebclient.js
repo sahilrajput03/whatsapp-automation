@@ -1,5 +1,6 @@
 // @ts-nocheck
-const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+// const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia } = require('./wwebjs-unreleased/whatsapp-web.js/index.js');
 require('dotenv').config({ quiet: true });
 
 // * Learn: We can create multiple wa bots using `const client2 = new Client(...)` (src: https://wwebjs.dev/guide/creating-your-bot/authentication.html#location-path )
