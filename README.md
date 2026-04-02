@@ -34,7 +34,9 @@ pm2 start nodemon --name tfbr --time -- --exitcrash tfbr-v2.js
 - **CLI Access:**
   - [`wacli`](https://github.com/steipete/wacli) 450* (16 Issues) by Peter Steinberger (maker of `openclaw`)
     - [`whatsmeow`](https://github.com/tulir/whatsmeow), 5.4k* - Go library for Unofficial WhatsAppWeb API
-  - [`whatsapp-cli`](https://github.com/vicentereig/whatsapp-cli) - I tested ✅ this, check [code here](https://github.com/sahilrajput03/config/blob/main/_macos/cron-scripts/test2.js). Check more about this in [Learn MacOS Doc](https://docs.google.com/document/d/1d4Tq28JC17lFqkoz3lqodACnOlCihFj-MnzNb2Vcqd8/edit?tab=t.0#heading=h.o0crduacle38).
+  - [`whatsapp-cli`](https://github.com/vicentereig/whatsapp-cli) (111*) - I tested ✅ this, check [code here](https://github.com/sahilrajput03/config/blob/main/_macos/cron-scripts/test2.js). Check more about this in [Learn MacOS Doc](https://docs.google.com/document/d/1d4Tq28JC17lFqkoz3lqodACnOlCihFj-MnzNb2Vcqd8/edit?tab=t.0#heading=h.o0crduacle38).
+    - Inspiration? It is used by Peter Steinberger in his openclaw project. Read more in [this doc](https://docs.google.com/document/d/1yUaJp0BtPbT9pAuIZ8pUxmer_W-9qXoE7rNpnLuPLQA/edit?tab=t.4dzdxheolxf8#heading=h.f4uzu8x0rvv3).
+  - [`whatscli`](https://github.com/normen/whatscli) - (895*)
 - **Rust Library for use of WhatsApp Unofficial API:**
   - [`whatsapp-rust`](https://github.com/jlucaso1/whatsapp-rust) 439* (2 Issues)
     - [Reddit Post](https://www.reddit.com/r/rust/comments/1mu4w60/whatsapp_client_written_purely_in_rust_based_on)
