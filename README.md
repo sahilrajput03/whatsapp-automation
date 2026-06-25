@@ -40,5 +40,6 @@ pm2 start nodemon --name tfbr --time -- --exitcrash tfbr-v2.js
 - **❤️❤️For whatsapp UI:** ([ChatGPT](https://chatgpt.com/c/69147401-ff58-8324-861e-ebc7f9d7d28b))
   - **Chatwoot**: [github.com/chatwoot/chatwoot](https://github.com/chatwoot/chatwoot) 26k* (5.5k Commits)
     - Open-source live-chat, email support, omni-channel desk. An alternative to Intercom, Zendesk, Salesforce Service Cloud etc. 🔥💬
+    - **🤔Does https://github.com/chatwoot/chatwoot uses official Whatsapp Cloud API or whatsapp web's API?** Answer: YES it does. (Source: [Gemini](https://gemini.google.com/app/c92ff02c233ae2d1))
   - **Rocket.Chat**: [github.com/RocketChat/Rocket.Chat](https://github.com/RocketChat/Rocket.Chat) 43.9k*, (28k Commits)
     - The communications platform that puts data protection first.
